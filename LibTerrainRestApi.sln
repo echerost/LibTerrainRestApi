@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.352
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "LibTerrainRestApi", "LibTerrainRestApi.pyproj", "{C60667F1-D733-448F-A336-2981EC0731FB}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "LibTerrainRestApi", "LibTerrainRestApi\LibTerrainRestApi.pyproj", "{0420514D-D916-4DC7-90BA-57EBEA8C48A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C60667F1-D733-448F-A336-2981EC0731FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C60667F1-D733-448F-A336-2981EC0731FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C60667F1-D733-448F-A336-2981EC0731FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C60667F1-D733-448F-A336-2981EC0731FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0420514D-D916-4DC7-90BA-57EBEA8C48A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0420514D-D916-4DC7-90BA-57EBEA8C48A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0420514D-D916-4DC7-90BA-57EBEA8C48A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0420514D-D916-4DC7-90BA-57EBEA8C48A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {687B184F-D012-4106-93D2-281DAECE5234}
+		SolutionGuid = {D373E768-460D-4CAA-B9AB-724929A6DE3A}
 	EndGlobalSection
 EndGlobal

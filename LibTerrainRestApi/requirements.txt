@@ -1,0 +1,3 @@
+Flask
+connexion
+shapely==1.6.4.post2
