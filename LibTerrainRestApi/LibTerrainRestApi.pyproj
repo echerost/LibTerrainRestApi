@@ -37,42 +37,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LibTerrainRestApi\" />
-    <Folder Include="LibTerrainRestApi\static\" />
-    <Folder Include="LibTerrainRestApi\static\content\" />
-    <Folder Include="LibTerrainRestApi\static\fonts\" />
-    <Folder Include="LibTerrainRestApi\static\scripts\" />
-    <Folder Include="LibTerrainRestApi\templates\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="requirements.txt" />
-    <Content Include="LibTerrainRestApi\static\content\bootstrap.css" />
-    <Content Include="LibTerrainRestApi\static\content\bootstrap.min.css" />
-    <Content Include="LibTerrainRestApi\static\content\site.css" />
-    <Content Include="LibTerrainRestApi\static\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="LibTerrainRestApi\static\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="LibTerrainRestApi\static\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="LibTerrainRestApi\static\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="LibTerrainRestApi\static\scripts\bootstrap.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\bootstrap.min.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery-1.10.2.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery-1.10.2.min.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery-1.10.2.min.map" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery.validate-vsdoc.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery.validate.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery.validate.min.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\modernizr-2.6.2.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\respond.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\respond.min.js" />
-    <Content Include="LibTerrainRestApi\static\scripts\_references.js" />
-    <Content Include="LibTerrainRestApi\templates\about.html" />
-    <Content Include="LibTerrainRestApi\templates\contact.html" />
-    <Content Include="LibTerrainRestApi\templates\index.html" />
-    <Content Include="LibTerrainRestApi\templates\layout.html" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
