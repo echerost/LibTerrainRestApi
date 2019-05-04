@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FeatureCollection'
+              $ref: '#/components/schemas/InputData'
 
       responses:
         '200':
@@ -25,19 +25,34 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LinkData'
+                $ref: '#/components/schemas/ReturnData'
 
 # Definizione GeoJSON https://gist.github.com/codan-telcikt/e1d59ccc9a3af83e083f1a514c84026c
 components:
    schemas:
-      LinkData:
+      ReturnData:
          type: object
-         description: Link data between two 3D points
          properties:
-            points:
-               $ref: '#/components/schemas/FeatureCollection'
-               #TODO: aggiungere ulteriori dati
+            source:
+               $ref: '#/components/schemas/Geometry'
+            destination:
+               $ref: '#/components/schemas/Geometry' 
+            maxSpeed:
+                type: number
 
+      InputData:
+        type: object
+        description: data needed by Rest service to process client request
+        properties:
+          area:
+            type: string
+            minLength: 3
+            maxLength: 40
+          geoJsonData:
+            $ref: '#/components/schemas/FeatureCollection'
+        required:
+            - area
+            - geoJsonData            
 
       FeatureCollection:
          type: object
@@ -49,6 +64,8 @@ components:
                   - FeatureCollection
             features:
                type: array
+               minItems: 2
+               maxItems: 2
                items:
                   $ref: '#/components/schemas/Feature'
 
@@ -76,7 +93,7 @@ components:
                   - Point
             coordinates:
                type: array
-               minItems: 3
-               maxItems: 3
+               minItems: 2
+               maxItems: 2
                items:
                   type: number
