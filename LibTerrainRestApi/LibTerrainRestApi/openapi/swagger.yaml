@@ -2,12 +2,8 @@ openapi: 3.0.2
 info:
   title: Building data link API
   version: 1.0.0
-
 servers:
-  - url: http://localhost:5000/api/v1.0
-
-# Paths supported by the server application
-# Return the maximum theoretical speed (if possible) of the radio data connection established between two points passed as input in a GeoJson file
+  - url: /api/v1.0
 paths:
   /link:
     post:
@@ -18,7 +14,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/InputData'
-
       responses:
         '200':
           description: Data found and computed
@@ -26,74 +21,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReturnData'
+        default:
+          description: Any error happened during data processing
 
-# Definizione GeoJSON https://gist.github.com/codan-telcikt/e1d59ccc9a3af83e083f1a514c84026c
 components:
-   schemas:
-      ReturnData:
-         type: object
-         properties:
-            source:
-               $ref: '#/components/schemas/Geometry'
-            destination:
-               $ref: '#/components/schemas/Geometry' 
-            maxSpeed:
-                type: number
+  schemas:
+    ReturnData:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/Geometry'
+        destination:
+          $ref: '#/components/schemas/Geometry'
+        maxSpeed:
+          type: number
+    InputData:
+      type: object
+      description: data needed by Rest service to process client request
+      properties:
+        area:
+          type: string
+          description: city or comune or province name
+          minLength: 3
+          maxLength: 40
+        source:
+          $ref: '#/components/schemas/Geometry'
+        destination:
+          $ref: '#/components/schemas/Geometry'
+      required:
+        - area
+        - source
+        - destination
+    Geometry:
+      type: object
+      description: GeoJSon geometry
+      properties:
+        type:
+          type: string
+          description: the geometry type
+          enum:
+            - Point
+        coordinates:
+          type: array
+          minItems: 2
+          maxItems: 2
+          items:
+            type: number
+      required:
+        - type
+        - coordinates
 
-      InputData:
-        type: object
-        description: data needed by Rest service to process client request
-        properties:
-          area:
-            type: string
-            minLength: 3
-            maxLength: 40
-          geoJsonData:
-            $ref: '#/components/schemas/FeatureCollection'
-        required:
-            - area
-            - geoJsonData            
+#      FeatureCollection:
+#         type: object
+#         description: GeoJSon Feature collection
+#         properties:
+#            type:
+#               type: string
+#               enum:
+#                  - FeatureCollection
+#            features:
+#               type: array
+#               minItems: 2
+#               maxItems: 2
+#               items:
+#                  $ref: '#/components/schemas/Feature'
+#         required:
+#            - type
+#            - features
 
-      FeatureCollection:
-         type: object
-         description: GeoJSon Feature collection
-         properties:
-            type:
-               type: string
-               enum:
-                  - FeatureCollection
-            features:
-               type: array
-               minItems: 2
-               maxItems: 2
-               items:
-                  $ref: '#/components/schemas/Feature'
-
-      Feature:
-         type: object
-         description: GeoJSon Feature
-         properties:
-            type:
-               type: string
-               enum:
-                  - Feature
-            geometry:
-               $ref: '#/components/schemas/Geometry'
-            properties:
-               type: object
-
-      Geometry:
-         type: object
-         description: GeoJSon geometry
-         properties:
-            type:
-               type: string
-               description: the geometry type
-               enum:
-                  - Point
-            coordinates:
-               type: array
-               minItems: 2
-               maxItems: 2
-               items:
-                  type: number
+#      Feature:
+#         type: object
+#         description: GeoJSon Feature
+#         properties:
+#            type:
+#               type: string
+#            properties:
+#               type: object
+#               enum:
+#                  - Feature
+#            geometry:
+#               $ref: '#/components/schemas/Geometry'
+#         required:
+#            - type

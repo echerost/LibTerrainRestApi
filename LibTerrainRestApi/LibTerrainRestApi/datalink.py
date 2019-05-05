@@ -19,7 +19,7 @@ def compute_link():
     try:
         shapes = get_shapes_from_geojson(jsonInputData)
     except:
-        return make_response(400)
+        return create_jsoncreate_json_response(create_empty_return_data(), 500)
     
     # Create link among two points
     link = createLink(shapes, area)
@@ -28,7 +28,7 @@ def compute_link():
     retval = None
     if link is None:
         returnData = create_empty_return_data()
-        retval = create_json_response(returnData, 400)
+        retval = create_json_response(returnData, 200)
     else:
         returnData = create_return_data(shape[0], shape[1], 32.4)
         retval = create_json_response(returnData)
@@ -43,10 +43,11 @@ def get_shapes_from_geojson(jsonData:dict) -> list :
     geoJsonData -- Json following GeoJson specification (https://tools.ietf.org/html/rfc7946) 
     """
     shapes = list()
-    featuresCollection = jsonData["geoJsonData"]
-    for feature in featuresCollection["features"]:
-        geom = shape(feature["geometry"])
-        shapes.append(geom)
+    #points = jsonData["geoJsonData"]
+    src=shape(jsonData["source"])
+    dst=shape(jsonData["destination"])
+    shapes.append(src)
+    shapes.append(dst)
     return shapes
 
 def create_empty_return_data() -> dict:
