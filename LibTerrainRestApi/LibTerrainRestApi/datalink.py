@@ -6,6 +6,7 @@ import geojson
 import connexion
 
 DB_CONNECTION_STRING = "postgres://student@192.168.2.48/terrain_ans"
+DEFAULT_LOSS_VALUE = 999.9
 
 def compute_link():
     """
@@ -27,10 +28,10 @@ def compute_link():
     # Build output data
     retval = None
     if link is None:
-        returnData = create_empty_return_data()
+        returnData = create_empty_return_data(shapes[0], shapes[1])
         retval = create_json_response(returnData, 200)
     else:
-        returnData = create_return_data(shape[0], shape[1], 32.4)
+        returnData = create_return_data(shape[0], shape[1],link['loss'], link['src_orient'], link['dst_orient'])
         retval = create_json_response(returnData)
 
     return retval
@@ -44,22 +45,28 @@ def get_shapes_from_geojson(jsonData:dict) -> list :
     """
     shapes = list()
     #points = jsonData["geoJsonData"]
-    src=shape(jsonData["source"])
-    dst=shape(jsonData["destination"])
+    src = shape(jsonData["source"])
+    dst = shape(jsonData["destination"])
     shapes.append(src)
     shapes.append(dst)
     return shapes
 
-def create_empty_return_data() -> dict:
-    src = Point(0.0,0.0)
-    retval = create_return_data(src,src,0.0)
+def create_empty_return_data(src:shape, dst:shape) -> dict:
+    #src = Point(0.0,0.0)
+    retval = create_return_data(src,dst,DEFAULT_LOSS_VALUE,0.0,0.0)
     return retval
 
-def create_return_data(src:shape, dst:shape, maxSpeed:float) -> dict:
+def create_return_data(src:shape, dst:shape, loss:float, src_orient:float, dest_orient:float) -> dict:
+    is_possible = True
+    if loss == DEFAULT_LOSS_VALUE:
+        is_possible = False
     retval = {
         'source': geojson.dumps(src),
         'destination': geojson.dumps(dst),
-        'maxSpeed': maxSpeed
+        'link_is_possible': is_possible,
+        'loss': loss,
+        'source_orientation': src_orient,
+        'destination_orientation': dest_orient
         }
     return retval
 

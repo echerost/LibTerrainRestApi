@@ -1,5 +1,4 @@
 Flask
-connexion
+connexion[swagger-ui]
 shapely==1.6.4.post2
 geojson
-swagger-ui-bundle[documentation]

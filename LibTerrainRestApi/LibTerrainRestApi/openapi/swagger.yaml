@@ -31,10 +31,21 @@ components:
       properties:
         source:
           $ref: '#/components/schemas/Geometry'
+          description: source GeoJson point sent in input data
         destination:
           $ref: '#/components/schemas/Geometry'
-        maxSpeed:
+          description: destination GeoJson point sent in input data
+        link_is_possible:
+          type: bool
+        loss:
           type: number
+          description: LOSS expressed in dBm
+        source_orientation:
+          type: object
+          description: Pitch and Roll orientation of the source antenna
+        destination_orientation:
+          type: object
+          description: Pitch and Roll orientation of the destination antenna
     InputData:
       type: object
       description: data needed by Rest service to process client request
