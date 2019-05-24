@@ -29,7 +29,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="config\db_config.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LibTerrainRestApi\datalink.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LibTerrainRestApi\responseGenerator.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="runserver.py" />
@@ -39,6 +45,7 @@
   <ItemGroup>
     <Folder Include="LibTerrainRestApi\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
+    <Folder Include="config\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
