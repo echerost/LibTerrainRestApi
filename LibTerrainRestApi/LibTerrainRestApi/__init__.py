@@ -2,7 +2,10 @@
 The flask application package.
 """
 
-#from flask import Flask
-#app = Flask(__name__)
-
-#import LibTerrainRestApi.views
+import connexion
+import os
+app = connexion.FlaskApp(__name__, specification_dir='./openapi/')
+app.add_api('swagger.yaml')
+#app.run(host="localhost",port=5000)
+import LibTerrainRestApi.views
+app.run()
