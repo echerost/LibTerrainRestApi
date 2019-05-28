@@ -90,13 +90,12 @@ def createLink(shapes: list, area: str) -> dict:
        STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING, lidar_table = dbConfig.LIDAR_TABLE_NAME)
 
     link = None
-    if(STI != None):
-        try:
-            #link = STI.get_link(source=startCoord, destination=endCoord)
-            link = STI.get_link(source=start, destination=end)
-        except:
-            e = sys.exc_info()
-            print(e)
+    try:
+       #link = STI.get_link(source=start, destination=end)
+       link = STI.get_link(source=start, destination=end)
+    except:
+       e = sys.exc_info()
+       print(e)
     else:
         print("Unable to connect to the database")
     return link

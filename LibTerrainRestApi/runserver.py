@@ -2,13 +2,13 @@
 This script runs the LibTerrainRestApi application using a development server.
 """
 
-import connexion
-import os
-app = connexion.FlaskApp(__name__, specification_dir='LibTerrainRestApi/openapi/')
-app.add_api('swagger.yaml')
-#app.run(host="localhost",port=5000)
-app.run()
-import LibTerrainRestApi.views
+#import connexion
+#import os
+#app = connexion.FlaskApp(__name__, specification_dir='LibTerrainRestApi/openapi/')
+#app.add_api('swagger.yaml')
+##app.run(host="localhost",port=5000)
+#app.run()
+#import LibTerrainRestApi.views
 
 #from os import environ
 #from LibTerrainRestApi import app

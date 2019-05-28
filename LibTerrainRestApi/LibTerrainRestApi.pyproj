@@ -7,7 +7,7 @@
     <ProjectGuid>0420514d-d916-4dc7-90ba-57ebea8c48a1</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <ProjectTypeGuids>{789894c7-04a9-4a11-a6b5-3f4435165112};{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
-    <StartupFile>runserver.py</StartupFile>
+    <StartupFile>LibTerrainRestApi/__init__.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -19,6 +19,7 @@
     <RootNamespace>LibTerrainRestApi</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
     <SuppressPackageInstallationPrompt>True</SuppressPackageInstallationPrompt>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,11 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LibTerrainRestApi\" />
+    <Folder Include="LibTerrainRestApi\static\css\" />
+    <Folder Include="LibTerrainRestApi\templates\" />
+    <Folder Include="LibTerrainRestApi\static\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
     <Folder Include="config\" />
+    <Folder Include="LibTerrainRestApi\static\js\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
+    <Content Include="LibTerrainRestApi\static\css\home.css" />
+    <Content Include="LibTerrainRestApi\static\js\home.js" />
+    <Content Include="LibTerrainRestApi\templates\home.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
