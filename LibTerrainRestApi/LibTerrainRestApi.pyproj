@@ -46,6 +46,8 @@
   <ItemGroup>
     <Folder Include="LibTerrainRestApi\" />
     <Folder Include="LibTerrainRestApi\static\css\" />
+    <Folder Include="LibTerrainRestApi\static\lib\" />
+    <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\" />
     <Folder Include="LibTerrainRestApi\templates\" />
     <Folder Include="LibTerrainRestApi\static\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
@@ -56,7 +58,11 @@
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="LibTerrainRestApi\static\css\home.css" />
     <Content Include="LibTerrainRestApi\static\js\home.js" />
+    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet.elevation-0.0.4.css" />
+    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet.elevation-0.0.4.min.js" />
+    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet.elevation-0.0.4.src.js" />
     <Content Include="LibTerrainRestApi\templates\home.html" />
+    <Content Include="LibTerrainRestApi\templates\WebPage1.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
