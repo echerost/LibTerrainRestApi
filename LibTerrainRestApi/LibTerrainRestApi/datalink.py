@@ -3,11 +3,11 @@ from flask import request,make_response,jsonify,Response
 import libterrain
 from shapely.geometry import shape, Point,mapping
 import connexion
-import LibTerrainRestApi.responseGenerator as responseGenerator
+import LibTerrainRestApi.responseGenerator as resGen
 import config.db_config as dbConfig
+import psycopg2.errors
 
 STI = None
-
 
 def compute_link():
     """
@@ -16,28 +16,28 @@ def compute_link():
     jsonInputData = request.get_json()
 
     # Get GeoJson geometries and convert them to shapely format
-    area = jsonInputData["area"]
     shapes = list()
     try:
         shapes = get_shapes_from_geojson(jsonInputData)
+        # Create link among two points
+        link = createLink(shapes)
+        # if link is None no link is possible
+        if link:
+            returnData = resGen.create_return_data(shapes[0], shapes[1],link['loss'], link['src_orient'], link['dst_orient'])
+            return resGen.create_json_response(returnData)
+        else:
+            returnData = resGen.create_empty_return_data(shapes[0], shapes[1])
+            return resGen.create_json_response(returnData)
+         
+    except psycopg2.errors.InternalError as e:
+        e = sys.exc_info()
+        #point = Point(0.0,0.0)
+        #returnData = responseGenerator.create_empty_return_data(point,point)
+        #return responseGenerator.create_json_response(returnData, 400)
+        return make_response("Invalid input", 400)
     except:
-        point = Point(0.0,0.0)
-        returnData = responseGenerator.create_empty_return_data(point,point)
-        return responseGenerator.create_json_response(returnData, 400)
-    
-    # Create link among two points
-    link = createLink(shapes, area)
-
-    # Build output data
-    retval = None
-    if link:
-        returnData = responseGenerator.create_return_data(shapes[0], shapes[1],link['loss'], link['src_orient'], link['dst_orient'])
-        retval = responseGenerator.create_json_response(returnData)
-    else:
-        returnData = responseGenerator.create_empty_return_data(shapes[0], shapes[1])
-        retval = responseGenerator.create_json_response(returnData, 200)       
-
-    return retval
+        e=sys.exc_info()[1]
+        return make_response(e, 500)
 
 def get_shapes_from_geojson(jsonData:dict) -> list :
     """
@@ -53,24 +53,7 @@ def get_shapes_from_geojson(jsonData:dict) -> list :
     shapes.append(dst)
     return shapes
 
-def createLink(shapes: list, area: str) -> dict:
-    # Recover from DB the two buildings between trying to establish the link
-
-    #import LibTerrainRestApi.config as config
-    #BI =
-    #libterrain.BuildingInterface.get_best_interface(config.DB_CONNECTION_STRING,
-    #area)
-    #import config.config as config
-    #BI =
-    #libterrain.BuildingInterface.get_best_interface(dbConfig.DB_CONNECTION_STRING,
-    #area)
-    #firstPoint = shapes[0]
-    #buildingsFirstPoint = BI.get_buildings(shape=firstPoint)
-    #secondPoint = shapes[1]
-    #buildingsSecondPoint = BI.get_buildings(shape=secondPoint)
-
-    #startCoord = buildingsFirstPoint[0].coord_height()
-    #endCoord = buildingsSecondPoint[0].coord_height()
+def createLink(shapes: list) -> dict:
 
     start = {
         'coords': shapes[0],
@@ -86,16 +69,7 @@ def createLink(shapes: list, area: str) -> dict:
     # terrain interface initialization
     global STI
     if(STI == None):
-       print("STI nulla")
+       #print("STI nulla")
        STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING, lidar_table = dbConfig.LIDAR_TABLE_NAME)
-
-    link = None
-    try:
-       #link = STI.get_link(source=start, destination=end)
-       link = STI.get_link(source=start, destination=end)
-    except:
-       e = sys.exc_info()
-       print(e)
-    else:
-        print("Unable to connect to the database")
+    link = STI.get_link(source=start, destination=end)
     return link
