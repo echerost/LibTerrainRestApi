@@ -34,7 +34,7 @@ components:
           $ref: '#/components/schemas/Geometry'
           description: destination GeoJson point sent in input data
         link_is_possible:
-          type: bool
+          type: boolean
         loss:
           type: number
           description: LOSS expressed in dBm
@@ -48,17 +48,11 @@ components:
       type: object
       description: data needed by Rest service to process client request
       properties:
-        area:
-          type: string
-          description: city or comune or province name
-          minLength: 3
-          maxLength: 40
         source:
           $ref: '#/components/schemas/Geometry'
         destination:
           $ref: '#/components/schemas/Geometry'
       required:
-        - area
         - source
         - destination
     Geometry:
