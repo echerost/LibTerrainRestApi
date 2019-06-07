@@ -36,8 +36,9 @@ def compute_link():
         #return responseGenerator.create_json_response(returnData, 400)
         return make_response("Invalid input", 400)
     except:
-        e=sys.exc_info()[1]
-        return make_response(e, 500)
+        response=make_response()
+        response.status_code=500
+        return response
 
 def get_shapes_from_geojson(jsonData:dict) -> list :
     """
@@ -69,7 +70,6 @@ def createLink(shapes: list) -> dict:
     # terrain interface initialization
     global STI
     if(STI == None):
-       #print("STI nulla")
        STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING, lidar_table = dbConfig.LIDAR_TABLE_NAME)
     link = STI.get_link(source=start, destination=end)
     return link
