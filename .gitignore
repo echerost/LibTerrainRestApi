@@ -21,6 +21,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+*env/
 
 # Build results
 [Dd]ebug/
