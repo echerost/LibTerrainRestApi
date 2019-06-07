@@ -84,14 +84,24 @@ function createRequestData() {
 function requestLinkData() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
-        if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-            document.getElementById("info").innerText = this.responseText;
-            elevation.clear();
-            L.geoJson(geojson, {
-                onEachFeature: elevation.addData.bind(elevation)
-            }).addTo(myMap);
-            myMap.setView([-44.696476, 169.13693], 11);
-            elevation._expand();
+        if (this.readyState == XMLHttpRequest.DONE) {
+            switch (this.status) {
+                case 400:
+                    document.getElementById("info").innerText = 'Error 400';
+                    break;
+                case 500:
+                    document.getElementById("info").innerText = 'Error 500';
+                    break;
+                case 200:
+                    document.getElementById("info").innerText = this.responseText;
+                    elevation.clear();
+                    L.geoJson(geojson, {
+                        onEachFeature: elevation.addData.bind(elevation)
+                    }).addTo(myMap);
+                    myMap.setView([-44.696476, 169.13693], 11);
+                    elevation._expand();
+                    break;
+            }           
         }
     };
     var dataToSend = createRequestData();
