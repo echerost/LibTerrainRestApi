@@ -34,7 +34,13 @@
     <Compile Include="config\db_config.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LibTerrainRestApi\classes\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LibTerrainRestApi\datalink.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LibTerrainRestApi\classes\link.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LibTerrainRestApi\responseGenerator.py">
@@ -46,9 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LibTerrainRestApi\" />
+    <Folder Include="LibTerrainRestApi\classes\" />
     <Folder Include="LibTerrainRestApi\static\css\" />
     <Folder Include="LibTerrainRestApi\static\lib\" />
     <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\" />
+    <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\" />
     <Folder Include="LibTerrainRestApi\templates\" />
     <Folder Include="LibTerrainRestApi\static\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
@@ -59,9 +67,9 @@
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="LibTerrainRestApi\static\css\home.css" />
     <Content Include="LibTerrainRestApi\static\js\home.js" />
-    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet.elevation-0.0.4.css" />
-    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet.elevation-0.0.4.min.js" />
-    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet.elevation-0.0.4.src.js" />
+    <Content Include="LibTerrainRestApi\static\js\JavaScript.js" />
+    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet-elevation.js" />
+    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\l.ellipse.min.js" />
     <Content Include="LibTerrainRestApi\templates\home.html" />
     <Content Include="requirements.txt" />
   </ItemGroup>

@@ -5,3 +5,30 @@
     width: 900px;
     align-items:center
 }
+
+<!--elevation-->
+.data-summary {
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 45px;
+}
+
+    .data-summary .summaryvalue {
+        font-weight: bold;
+    }
+
+#map {
+    height: 40%;
+    width: 40%;
+    margin: 20px;
+}
+
+#elevation-div {
+    height: 25%;
+    width: 40%;
+    padding: 0px;
+    margin: 20px;
+    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
