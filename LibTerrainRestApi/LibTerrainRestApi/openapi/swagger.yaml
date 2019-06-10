@@ -3,7 +3,7 @@ info:
   title: Building data link API
   version: 1.0.0
 servers:
-  - url: /api/v1.0
+  - url: /api/v1
 paths:
   /link:
     post:
@@ -52,9 +52,29 @@ components:
           $ref: '#/components/schemas/Geometry'
         destination:
           $ref: '#/components/schemas/Geometry'
+        offsets:
+          type: object
+          description: offsets to add to points altitude
+          properties:
+            source:
+              type: number
+              description: source elevation offset
+              minimum: 0
+              default: 4
+            destination:
+              type: number
+              description: destination elevation offset
+              minimum: 0
+              default: 4
+            auto:
+              type: number
+              description: offset auto value data
+              minimum: 0
+              default: 0
       required:
         - source
         - destination
+
     Geometry:
       type: object
       description: GeoJSon geometry

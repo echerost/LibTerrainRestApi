@@ -1,75 +1,38 @@
 import sys
-from flask import request,make_response,jsonify,Response
-import libterrain
-from shapely.geometry import shape, Point,mapping
-import connexion
+from flask import request,make_response
 import LibTerrainRestApi.responseGenerator as resGen
-import config.db_config as dbConfig
-import psycopg2.errors
-
-STI = None
+from LibTerrainRestApi.classes.link import Link
 
 def compute_link():
     """
     This function tries to establish a data connection between two points end return link data
     """
-    jsonInputData = request.get_json()
 
-    # Get GeoJson geometries and convert them to shapely format
-    shapes = list()
+    # Get all input data
+    myLink = None
+    # possible error parsing input data
     try:
-        shapes = get_shapes_from_geojson(jsonInputData)
-        # Create link among two points
-        link = createLink(shapes)
-        # if link is None no link is possible
-        if link:
-            returnData = resGen.create_return_data(shapes[0], shapes[1],link['loss'], link['src_orient'], link['dst_orient'])
+        data=request.get_json()
+        myLink = Link(data)
+    except:
+        e=sys.exc_info()
+        print(e[0])
+        return make_response("Invalid input data", 400)
+
+    # Create link among two points
+    try:
+        linkData = myLink.link_two_points()
+        if(myLink.is_possible()):
+            returnData = resGen.create_return_data(myLink.source, myLink.destination,linkData['loss'], linkData['src_orient'], linkData['dst_orient'])
             return resGen.create_json_response(returnData)
         else:
-            returnData = resGen.create_empty_return_data(shapes[0], shapes[1])
+            returnData = resGen.create_empty_return_data(myLink.source, myLink.destination)
             return resGen.create_json_response(returnData)
-         
-    except psycopg2.errors.InternalError as e:
-        e = sys.exc_info()
-        #point = Point(0.0,0.0)
-        #returnData = responseGenerator.create_empty_return_data(point,point)
-        #return responseGenerator.create_json_response(returnData, 400)
-        return make_response("Invalid input", 400)
     except:
-        response=make_response()
-        response.status_code=500
-        return response
-
-def get_shapes_from_geojson(jsonData:dict) -> list :
-    """
-    This function extracts all geometries from geoJson dict (GeoJson converted in dictionary)
-
-    Keyword argument:
-    geoJsonData -- Json following GeoJson specification (https://tools.ietf.org/html/rfc7946) 
-    """
-    shapes = list()
-    src = shape(jsonData["source"])
-    dst = shape(jsonData["destination"])
-    shapes.append(src)
-    shapes.append(dst)
-    return shapes
-
-def createLink(shapes: list) -> dict:
-
-    start = {
-        'coords': shapes[0],
-         'height': 4,
-         'optionals': 'start'
-        }
-    end = {
-        'coords': shapes[1],
-        'height': 4,
-        'optionals': 'end'
-        }
-    
-    # terrain interface initialization
-    global STI
-    if(STI == None):
-       STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING, lidar_table = dbConfig.LIDAR_TABLE_NAME)
-    link = STI.get_link(source=start, destination=end)
-    return link
+        # db connection error
+        e=sys.exc_info()
+        print(e)
+        resp = make_response()
+        resp.status_code = 500
+        return resp
+            
