@@ -2,13 +2,10 @@
 <html>
 <head>
   <title>leaflet-elevation.js</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-
-  <link rel="stylesheet" href="../static/css/home.css">
-  <!-- Leaflet (JS/CSS) -->
+  <meta content="initial-scale=1.0, user-scalable=no charset=UTF-8">
   <!-- D3.js -->
   <script src="https://unpkg.com/d3@4.13.0/build/d3.min.js" charset="utf-8"></script>
+  <!-- Leaflet (JS/CSS) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
@@ -18,18 +15,20 @@
   <!-- leaflet-elevation -->
   <link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation@0.3.9/leaflet-elevation.min.css">
   <script src="../static/lib/Leaflet.Elevation/leaflet-elevation.js"></script>
+  <link rel="stylesheet" href="../static/css/home.css">
   <script src="../static/js/home.js"></script>
 </head>
 
 <body>
-  <div id="info"></div>
+  <div id="info">prova</div>
   <div id="map"></div>
-  <div id="elevation-div"></div>
-  <div id="data-summary" class="data-summary">
-    <span class="totlen"><span class="summarylabel">Total Length: </span><span class="summaryvalue"></span></span> — <span class="maxele"><span class="summarylabel">Max Elevation: </span><span class="summaryvalue"></span></span>
-    — <span class="minele"><span class="summarylabel">Min Elevation: </span><span class="summaryvalue"></span></span>
+  <div id="elevdata">
+    <span id="close" onclick="this.parentElement.style.display = 'none'">x</span>
+    <div id="elevation-div"></div>
+    <div id="data-summary" class="data-summary" ord><span class="totlen"><span class="summarylabel">Total Length: </span><span class="summaryvalue" /></span> —<span class="maxele"><span class="summarylabel">Max Elevation: </span><span class="summaryvalue" /></span>—<span class="minele"><span class="summarylabel">Min Elevation: </span><span class="summaryvalue"></span></span></div>
   </div>
-  <button onclick="requestLinkData()">Get data</button> 
+
+  <button onclick="getData()">Get data</button>
 
   <script>
     initialize();
