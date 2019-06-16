@@ -3,35 +3,27 @@ var map;
 var markersLayer;
 var elevation;
 var controlLayer;
-var geojson = "{\"name\": \"LOS\", \"type\": \"FeatureCollection\",\"features\": [{\"type\": \"Feature\", \"geometry\": { \"type\": \"LineString\", \"coordinates\": [[169.13693, -44.696476, 296], [169.134602, -44.69764, 295], [169.129983, -44.701164, 299], [169.131292, -44.702382, 303], [169.13376, -44.704533, 315], [169.135568, -44.705574, 336], [169.136179, -44.70934, 338], [169.137011, -44.714066, 344], [169.136984, -44.719489, 342], [169.136898, -44.725235, 350], [169.136801, -44.730143, 353], [169.135632, -44.734853, 354], [169.131882, -44.738989, 363], [169.129688, -44.744241, 363], [169.123937, -44.746982, 361], [169.118509, -44.750286, 371], [169.112763, -44.753113, 374], [169.107807, -44.755356, 378]] }, \"properties\": null }]}";
-var json;
+
+var opts = {
+  elevationControl: {
+    options: {
+      theme: "lime-theme",
+      useHeightIndicator: true,
+      elevationDiv: "#elevation-div",
+      detachedView: true
+    },
+  },
+  layersControl: { options: { collapsed: false } },
+};
 
 function initialize() {
-  var opts = {
-    elevationControl: {
-      data: geojson,
-      options: {
-        theme: "lime-theme", //default: lime-theme
-        useHeightIndicator: true, //if false a marker is drawn at map position
-        elevationDiv: "#elevation-div",
-        detachedView: true,
-      },
-    },
-    layersControl: {
-      options: {
-        collapsed: false,
-      },
-    },
-  };
   map = L.map('map').on('locationerror ', setDefaultMapView)
-    .on('click', addMarker).on('eledata_loaded', eledata_loaded).on('eledata_reloaded', drawEllipse).locate({ setView: true });
+    .on('click', addMarker).on('eledata_loaded', eledata_loaded).locate({ setView: true});//.on('eledata_reloaded', drawEllipse)
   setMapTileLayer(map);
   markersLayer = L.featureGroup().on('click', removeMarker).addTo(map);
 
   elevation = L.control.elevation(opts.elevationControl.options);
-  //elevation.addEventListener('resizeChart', drawEllipse);
   elevation.addTo(map);
-  elevation.onResize = drawEllipse;
   controlLayer = L.control.layers(null, null, opts.layersControl.options);
   //controlLayer.addTo(map); //per selezionare i layer manualmente(checkbox)
 }
@@ -55,7 +47,7 @@ function setMapTileLayer(map) {
  * Set map view to a default location
  */
 function setDefaultMapView() {
-  myMap.setView([51.505, -0.09], 11);
+  map.setView([43.968526774903815, 11.125824451446533], 15);
 }
 
 function addMarker(e) {
@@ -90,30 +82,39 @@ function createRequestData() {
   var data = {
     source: {
       type: 'Point',
-      coordinates: [first.lng, first.lat]
+      coordinates:[first.lng, first.lat] //[11.129426, 43.951486]
     },
     destination: {
       type: 'Point',
-      coordinates: [second.lng, second.lat]
+      coordinates: [second.lng, second.lat]//[11.129399, 43.952413]
     }
   };
+  switch (document.getElementById("offset_mode").value) {
+    case 'auto':
+      data['offsets'] = {
+        auto: parseInt(document.getElementById('auto_offset').value)
+      };
+      break;
+    case 'manual':
+      data['offsets'] = {
+        source: parseInt(document.getElementById('manual_src_offset').value),
+        destination: parseInt(document.getElementById('manual_dst_offset').value)
+      };
+      break;
+  }
   return data;
 }
 
-function getData() {
-  json = JSON.parse(geojson);
-  var coordinates = json.features[0].geometry.coordinates;
-  coordinates[0][2] += 4;
-  var firstH = coordinates[0][2];
-  coordinates[coordinates.length - 1][2] += 5;
-  var lastH = coordinates[coordinates.length - 1][2];
-  geojson = JSON.stringify(json);
-  elevation.loadData(geojson);
-  drawEllipse();
-}
-
 function requestLinkData() {
+  if (markersLayer.getLayers().length != 2) {
+    alert("Select two points");
+    return;
+  }
   var xhttp = new XMLHttpRequest();
+  var dataToSend = createRequestData();
+  xhttp.open("POST", "/api/v1/link", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  xhttp.send(JSON.stringify(dataToSend));
   xhttp.onreadystatechange = function () {
     if (this.readyState == XMLHttpRequest.DONE) {
       switch (this.status) {
@@ -124,47 +125,81 @@ function requestLinkData() {
           document.getElementById("info").innerText = 'Error 500';
           break;
         case 200:
-          document.getElementById("info").innerText = this.responseText;
-          //elevation.clear();
-          //elevation.loadData(geojson);
-          //myMap.setView([-44.696476, 169.13693], 11);
-          //elevation.show();
+          emptyMyData();
+          var profile = JSON.parse(this.responseText);
+          // link non possibile
+          if (!profile.link_is_possible) {
+            alert("Connection is not possible");
+            return;
+          }
+          // aggiunge offset altezza primo e ultimo punto
+          var coordinates = profile.profile.features[0].geometry.coordinates;
+          coordinates[0][2] += profile.offsets.source;
+          coordinates[coordinates.length - 1][2] += profile.offsets.destination;
+          //{ TEST: per verificare il corretto ridisegno dell'elevazione ed ellisse
+          //var coordinates = profile.profile.features[0].geometry.coordinates;
+          //var randHeight = Math.floor((Math.random() * 20) + 1);
+          //var randmid = Math.floor((Math.random() * coordinates.length));
+          //coordinates[randmid][2] += randHeight;
+          //document.getElementById("info").innerText = profile.link_is_possible.toString().toUpperCase();
+          //}
+          elevation.loadData(JSON.stringify(profile.profile));
+          drawEllipse();
+          offsetHtmlUpdate(profile.offsets.source, profile.offsets.destination);
           break;
       }
     }
   };
-  var dataToSend = createRequestData();
-  xhttp.open("POST", "/api/v1.0/link", true);
-  xhttp.setRequestHeader("Content-type", "application/json");
-  xhttp.send(JSON.stringify(dataToSend));
 }
 
+/**
+ * Draw an ellipse over terrain elevation profile
+ * Call this function only after elevation profile
+ */
 function drawEllipse() {
-  var coordinates = json.features[0].geometry.coordinates;
-  var firstH = coordinates[0][2];
-  var lastH = coordinates[coordinates.length - 1][2];
-  var base = d3.selectAll("svg").filter(".background").select("rect");
-  var parent = base.select(function () { return this.parentNode; });
+  var coordinates = elevation._data;
+  var firstH = coordinates[0].z;
+  var lastH = coordinates[coordinates.length - 1].z;
 
-  //punti partenza
+  // punti partenza
   var startX = 0;
   var startY = elevation._y(firstH);//altezza primo elemento
   var endX = elevation._width();
   var endY = elevation._y(lastH);//altezza ultimo elemento
 
-  //centro
+  // centro
   var mX = (startX + endX) / 2;
   var mY = (startY + endY) / 2;
 
   var length = Math.sqrt(Math.pow((mX - startX), 2) + Math.pow((mY - startY), 2));
   var h = mY - startY;
   var angle = h / length * 180 / Math.PI;
-  //Draw the Ellipse
-  var circle = parent.append("ellipse")
+
+  // draw ellipse
+  var base = d3.selectAll("svg").filter(".background").select("rect");
+  var parent = base.select(function () { return this.parentNode; });
+  parent.append("ellipse")
     .attr("cx", mX)
     .attr("cy", mY)
     .attr("rx", length)
     .attr("ry", 3)
     .attr("transform", "rotate(" + angle + "," + mX + "," + mY + ")")
     .attr("fill-opacity", 0.3);
+}
+
+function emptyMyData() {
+  document.getElementById('elevation-div').innerHTML = '';
+  elevation = L.control.elevation(opts.elevationControl.options);
+  elevation.addTo(map);
+  controlLayer = L.control.layers(null, null, opts.layersControl.options);
+  markersLayer.clearLayers();
+}
+
+function offsetHtmlUpdate(src_offset, dst_offset) {
+  document.getElementById("offset_mode").style.display = 'none';
+  document.getElementById("auto_offset_div").style.display = 'none';
+  document.getElementById("manual_offset_div").style.display = 'none';
+  document.getElementById("result_src_offset").innerText = src_offset;
+  document.getElementById("result_dst_offset").innerText = dst_offset;
+  document.getElementById('result_offset_div').style.display = 'block';
 }

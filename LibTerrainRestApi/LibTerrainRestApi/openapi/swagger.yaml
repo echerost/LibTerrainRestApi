@@ -7,7 +7,7 @@ servers:
 paths:
   /link:
     post:
-      operationId: LibTerrainRestApi.datalink.compute_link
+      operationId: LibTerrainRestApi.endpoints.compute_link
       requestBody:
         required: true
         content:
@@ -20,12 +20,50 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReturnData'
+                oneOf:
+                - $ref: '#/components/schemas/LinkBase'
+                - $ref: '#/components/schemas/LineOfSight'
 
 components:
   schemas:
-    ReturnData:
+    LineOfSight:
+      description: there is line of sight between source and destination
+      allOf:
+        - $ref: '#/components/schemas/LinkBase'
+        - type: object
+          properties:
+            loss:
+              type: number
+              description: LOSS expressed in dBm
+            source_orientation:
+              type: object
+              description: Pitch and Roll orientation of the source antenna
+            destination_orientation:
+              type: object
+              description: Pitch and Roll orientation of the destination antenna
+            offsets:
+              $ref: '#/components/schemas/ManualOffsets'
+            profile:
+              type: array
+              minItems: 2
+              items:
+                type: array
+                items:
+                  type: number
+                minItems: 3
+                maxItems: 3
+          required:
+            - loss
+            - source_orientation
+            - destination_orientation
+
+    LinkBase:
       type: object
+      discriminator:
+        propertyName: link_is_possible
+        mapping:
+          true: '#/components/schemas/LineOfSight'
+          false: '#/components/schemas/LinkBase'
       properties:
         source:
           $ref: '#/components/schemas/Geometry'
@@ -35,15 +73,38 @@ components:
           description: destination GeoJson point sent in input data
         link_is_possible:
           type: boolean
-        loss:
+      required:
+        - source
+        - destination
+        - link_is_possible
+
+    ManualOffsets:
+      type: object
+      description: elevation offsets
+      properties:
+        source:
           type: number
-          description: LOSS expressed in dBm
-        source_orientation:
-          type: object
-          description: Pitch and Roll orientation of the source antenna
-        destination_orientation:
-          type: object
-          description: Pitch and Roll orientation of the destination antenna
+          description: source elevation offset
+          minimum: 0
+        destination:
+          type: number
+          description: destination elevation offset
+          minimum: 0
+      required:
+        - source
+        - destination
+
+    AutoOffsets:
+      type: object
+      description: elevation offsets
+      properties:
+            auto:
+              type: number
+              description: offset auto value data
+              minimum: 0
+      required:
+        - auto
+      
     InputData:
       type: object
       description: data needed by Rest service to process client request
@@ -53,24 +114,10 @@ components:
         destination:
           $ref: '#/components/schemas/Geometry'
         offsets:
-          type: object
-          description: offsets to add to points altitude
-          properties:
-            source:
-              type: number
-              description: source elevation offset
-              minimum: 0
-              default: 4
-            destination:
-              type: number
-              description: destination elevation offset
-              minimum: 0
-              default: 4
-            auto:
-              type: number
-              description: offset auto value data
-              minimum: 0
-              default: 0
+          oneOf:
+            - $ref: '#/components/schemas/ManualOffsets'
+            - $ref: '#/components/schemas/AutoOffsets'
+          
       required:
         - source
         - destination
@@ -93,36 +140,3 @@ components:
       required:
         - type
         - coordinates
-
-#      FeatureCollection:
-#         type: object
-#         description: GeoJSon Feature collection
-#         properties:
-#            type:
-#               type: string
-#               enum:
-#                  - FeatureCollection
-#            features:
-#               type: array
-#               minItems: 2
-#               maxItems: 2
-#               items:
-#                  $ref: '#/components/schemas/Feature'
-#         required:
-#            - type
-#            - features
-
-#      Feature:
-#         type: object
-#         description: GeoJSon Feature
-#         properties:
-#            type:
-#               type: string
-#            properties:
-#               type: object
-#               enum:
-#                  - Feature
-#            geometry:
-#               $ref: '#/components/schemas/Geometry'
-#         required:
-#            - type

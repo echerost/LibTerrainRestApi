@@ -37,7 +37,7 @@
     <Compile Include="LibTerrainRestApi\classes\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LibTerrainRestApi\datalink.py">
+    <Compile Include="LibTerrainRestApi\endpoints.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LibTerrainRestApi\classes\link.py">
@@ -67,7 +67,6 @@
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="LibTerrainRestApi\static\css\home.css" />
     <Content Include="LibTerrainRestApi\static\js\home.js" />
-    <Content Include="LibTerrainRestApi\static\js\JavaScript.js" />
     <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet-elevation.js" />
     <Content Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\l.ellipse.min.js" />
     <Content Include="LibTerrainRestApi\templates\home.html" />
