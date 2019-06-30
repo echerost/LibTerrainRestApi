@@ -8,6 +8,7 @@ paths:
   /link:
     post:
       operationId: LibTerrainRestApi.endpoints.compute_link
+      description: compute possible link between two points with elevation profile and other data
       requestBody:
         required: true
         content:
@@ -23,6 +24,19 @@ paths:
                 oneOf:
                 - $ref: '#/components/schemas/LinkBase'
                 - $ref: '#/components/schemas/LineOfSight'
+  /devices:
+    get:
+      operationId: LibTerrainRestApi.endpoints.get_devices_names
+      description: list of devices (antenna)
+      responses:
+        '200':
+          description: JSON array of device names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
 
 components:
   schemas:
@@ -35,6 +49,10 @@ components:
             loss:
               type: number
               description: LOSS expressed in dBm
+            maximum_bitrate:
+              type: array
+              items:
+                type: number
             source_orientation:
               type: object
               description: Pitch and Roll orientation of the source antenna
@@ -56,6 +74,8 @@ components:
             - loss
             - source_orientation
             - destination_orientation
+            - maximum_bitrate
+            - profile
 
     LinkBase:
       type: object
@@ -117,10 +137,17 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ManualOffsets'
             - $ref: '#/components/schemas/AutoOffsets'
+        source_device:
+          type: string
+        destination_device:
+          type: string
           
       required:
         - source
         - destination
+        - offsets
+        - source_device
+        - destination_device
 
     Geometry:
       type: object

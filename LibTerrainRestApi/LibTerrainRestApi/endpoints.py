@@ -2,6 +2,7 @@ import sys
 from flask import request,make_response
 import LibTerrainRestApi.responseGenerator as resGen
 from LibTerrainRestApi.classes.link import Link
+import LibTerrainRestApi.terrain_analysis.ubiquiti as ubi
 
 def compute_link():
     """
@@ -31,4 +32,20 @@ def compute_link():
         resp = make_response()
         resp.status_code = 500
         return resp
+
+def get_devices_names():
+    """Get the device codes that the user can choose """
+    try:
+        keys = []
+        for device in Link.get_devices():
+            keys.append(device)
+        response = resGen.create_json_response(keys)          
+        return response
+    except:
+        e = sys.exc_info()
+        print(e)
+        resp = make_response()
+        resp.status_code = 500
+        return resp
+    
             

@@ -46,6 +46,11 @@
     <Compile Include="LibTerrainRestApi\responseGenerator.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LibTerrainRestApi\terrain_analysis\ubiquiti.py" />
+    <Compile Include="LibTerrainRestApi\terrain_analysis\wifi.py" />
+    <Compile Include="LibTerrainRestApi\terrain_analysis\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="LibTerrainRestApi\__init__.py" />
     <Compile Include="LibTerrainRestApi\views.py" />
@@ -55,21 +60,38 @@
     <Folder Include="LibTerrainRestApi\classes\" />
     <Folder Include="LibTerrainRestApi\static\css\" />
     <Folder Include="LibTerrainRestApi\static\lib\" />
-    <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\" />
     <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\" />
     <Folder Include="LibTerrainRestApi\templates\" />
     <Folder Include="LibTerrainRestApi\static\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
     <Folder Include="config\" />
     <Folder Include="LibTerrainRestApi\static\js\" />
+    <Folder Include="LibTerrainRestApi\terrain_analysis\" />
+    <Folder Include="LibTerrainRestApi\terrain_analysis\80211\" />
+    <Folder Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\" />
+    <Folder Include="LibTerrainRestApi\terrain_analysis\80211\tables\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="LibTerrainRestApi\static\css\home.css" />
+    <Content Include="LibTerrainRestApi\static\css\modal.css" />
     <Content Include="LibTerrainRestApi\static\js\home.js" />
-    <Content Include="LibTerrainRestApi\static\lib\Leaflet.Elevation\leaflet-elevation.js" />
+    <Content Include="LibTerrainRestApi\static\js\mapElevation.js" />
+    <Content Include="LibTerrainRestApi\static\js\rest.js" />
     <Content Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\l.ellipse.min.js" />
     <Content Include="LibTerrainRestApi\templates\home.html" />
+    <Content Include="LibTerrainRestApi\templates\homeOld.html" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-IsoStation5AC.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-IsoStation5AC_90.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-LiteBeam5ACGEN2.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-NanoBeam5ACGEN2.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-NanoStation5AC.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-NanoStation5ACL.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-PowerBeam5AC300ISO.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-PowerBeam5AC400ISO.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-PowerBeam5AC500ISO.json" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\tables\mcs-AC.csv" />
+    <Content Include="LibTerrainRestApi\terrain_analysis\80211\tables\mcs-N.csv" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

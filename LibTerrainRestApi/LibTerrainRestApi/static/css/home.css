@@ -1,53 +1,46 @@
+
+*{
+  box-sizing:border-box;
+}
 html, body {
   height: 100%;
-  width: 90%;
-}
-
-body {
-  margin: 5% 2% 0px 2%;
+  width: 100%;
 }
 
 #map {
-  height: 45%;
-  width: 50%;
-  margin-left: 20px;
-  float: left;
-}
-
-#input_div {
-  width: 15%;
-  float: left;
-  margin-left: 15px;
+  height: 100%;
+  width: 100%;
 }
 
 #elevdata {
-  height: 40%;
-  width: 70%;
-  margin-top: 20px;
-  margin-left: 20px;
-  clear:both;
+  height: 30%;
+  width: 75%;
+  margin:5% auto auto auto;
+  background:rgba(243, 231, 231, 0.92);
+  padding:20px;
+  border-radius:20px;
 }
 
-  #elevdata #elevation-div {
-    /*height: 70%;*/
-    width: 100%;
-  }
+#elevation-div {
+  height: 80%;
+  /*width: 100%;*/
+}
 
-  #elevdata #data-summary {
-    font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    /*bottom: 0px;*/
-    left: 30px;
-    float: left;
-    clear: both;
-  }
+#elevdata #data-summary {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  /*bottom: 0px;*/
+  left: 30px;
+  float: left;
+  clear: both;
+}
 
 .data-summary .summaryvalue {
   font-weight: bold;
 }
 
 #close {
-  float: left;
+  /*float: left;
   display: inline-block;
   position: relative;
   z-index: 1500;
@@ -58,68 +51,123 @@ body {
   text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
   text-align: center;
   vertical-align: middle;
-  cursor: pointer;
-}
-
-fieldset {
-  /*width: 70%;*/
-  font: normal 20px 'Bitter', serif;
-  color: #2A88AD;
-  padding: 2px;
+  cursor: pointer;*/
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
   font-weight: bold;
-  border-radius: 20px;
-  border: 3px solid #46ac45;
 }
 
-  fieldset legend {
-    font-size: 20px;
+button {
+  /*text-align: center;
+  margin: 2px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 2px solid #fff;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);*/
+  /**/
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  display: inline-block;
+  margin-bottom: 0;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+}
+
+.success {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+
+.danger {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+
+#button_div {
+  /*text-align: center;
+  margin: auto;*/
+  display: flex;
+  justify-content: center;
+  clear: both;
+}
+
+#SideNav a {
+  position: absolute;
+  left: -80px;
+  top: 100px;
+  transition: 0.3s;
+  padding: 15px;
+  width: 100px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  z-index: 1500;
+}
+
+  #SideNav a:hover {
+    left: 0;
   }
 
-select {
-  /*height: 26px;*/
-  margin: 5px 0px 5px 10px;
+#ElevBtn {
+  top: 20px;
+  background-color: #2196F3;
 }
 
-.offset_mode_div {
-  padding: 10px;
-  background: #F8F8F8;
-  margin-bottom: 15px;
+.userInput {
+  text-align: center;
+  display: block;
+  box-sizing: border-box;
+  padding: 2px;
+  border-radius: 6px;
+  border: 2px solid #fff;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.33);
 }
 
-label {
+.label-userInput {
   display: block;
   font: 13px Arial, Helvetica, sans-serif;
-  color: #888;
-  margin-bottom: 15px;
+  color: #4f4f4f;
+  margin: 15px 0 15px 0;
 }
 
-  label.field {
+  .label-userInput label.field {
     text-align: center;
     float: left;
   }
 
-input {
-  text-align: center;
-  display: block;
-  box-sizing: border-box;
-  /*width: 100%;*/
-  padding: 8px;
-  border-radius: 6px;
-  border: 2px solid #fff;
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+.flex {
+  display: flex;
+  /*margin: auto;*/
+  justify-content: center;
+  padding: 3px;
 }
 
-button {
-  text-align: center;
-  margin: 2px;
-  box-sizing: border-box;
-  padding: 8px;
-  border-radius: 6px;
-  border: 2px solid #fff;
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+.input_section {
+  margin: 10px 10px 10px 10px;
+  background: #f0f3f7;
+  border-radius: 20px;
+  /*border:1px dotted #a8a6a6;*/
+  padding: 15px 30px 15px 30px;
 }
 
-#button_div {
-  text-align: center;
-  margin: auto;
+.vl {
+  border-bottom: 2px solid rgba(27, 0, 255, 0.82);
+  margin: 7px 0 7px 0;
 }
+
+/*.center {
+  margin-left: auto;
+  margin-right: auto;
+}*/

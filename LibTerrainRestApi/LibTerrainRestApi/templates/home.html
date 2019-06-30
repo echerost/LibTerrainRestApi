@@ -1,9 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-  <meta content="initial-scale=1.0">
-  <title>leaflet-elevation.js</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- D3.js -->
   <script src="https://unpkg.com/d3@4.13.0/build/d3.min.js" charset="utf-8"></script>
   <!-- Leaflet (JS/CSS) -->
@@ -11,32 +9,77 @@
   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
   <!-- leaflet-elevation -->
   <link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation@0.3.9/leaflet-elevation.min.css">
-  <script src="../static/lib/Leaflet.Elevation/leaflet-elevation.js"></script>
+  <script src="https://unpkg.com/@raruto/leaflet-elevation@latest/leaflet-elevation.js"></script>
   <link rel="stylesheet" href="../static/css/home.css">
+  <link rel="stylesheet" href="../static/css/modal.css">
   <script src="../static/js/home.js"></script>
+  <script src="../static/js/mapElevation.js"></script>
+  <script src="../static/js/rest.js"></script>
 </head>
 
 <body>
-  <!--  <div id="info"></div>-->
+  <div id="SideNav" class="sidenav">
+    <a onclick="activateMap()" href="#" id="ElevBtn">Elevation profile</a>
+  </div>
   <div id="map"></div>
-  <div id="input_div">
-    <form>
-      <fieldset>
-        <legend>Height offsets</legend>
-        <div id="offset_mode_div">
-          <select id="offset_mode" onchange="offsetModeChanged(this.value)">
-            <option value="auto" selected>Auto offset</option>
-            <option value="manual">Manual offset</option>
-          </select>
+  <div id="modal_div" class="modal" style="display:none">
+    <div class="modal-content">
+      <span class="close" onclick="hideElementById('modal_div')">&times;</span>
+      <div class="flex">
+        <div id="offset_mode_div" class="input_section" style="background:rgba(230, 215, 154, 0.52)">
+          <label>Offset</label>
+          <div class="vl"></div>
+          <label id="offset_mode_lb" class="label-userInput">
+            Offset mode:
+            <select id="offset_mode" class="userInput selector" onchange="offsetModeChanged(this.value)">
+              <option value="auto" selected>Auto offset</option>
+              <option value="manual">Manual offset</option>
+            </select>
+          </label>
           <div id="auto_offset_div" class="offset_mode_div">
-            <label>Range max (10):<input type="number" id="auto_offset" min="0" max="40" step="1" value="10" /></label>
+            <label class="label-userInput">Range max (10):<input type="number" id="auto_offset" class="userInput" min="0" max="10" step="1" value="10" /></label>
           </div>
           <div id="manual_offset_div" class="offset_mode_div" style="display: none">
-            <label>Source<input type="number" id="manual_src_offset" min="0" max="50" step="1" required /></label>
-            <label>Destination<input type="number" id="manual_dst_offset" min="0" max="50" step="1" required /></label>
+            <label class="label-userInput">Source<input type="number" id="manual_src_offset" class="userInput" min="0" max="10" step="1" required /></label>
+            <label class="label-userInput">Destination<input type="number" id="manual_dst_offset" class="userInput" min="0" max="10" step="1" required /></label>
           </div>
           <div id="result_offset_div" class="offset_mode_div" style="display: none">
-            <label>
+            <table>
+              <tr>
+                <td>Offsets(m):</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Source</td>
+                <td id="result_src_offset"></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Destination</td>
+                <td id="result_dst_offset"></td>
+              </tr>
+              <tr><td></td></tr>
+              <tr><td>Link data:</td></tr>
+              <tr>
+                <td></td>
+                <td>Loss(dB):</td>
+                <td id="result_loss"></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Max bitrate:</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Down:<label id="result_bitrate_dwn"></label>
+              </tr>
+              <tr>
+                <td></td><td></td>
+                <td>Up:<label id="result_bitrate_up"></label></td>
+              </tr>
+            </table>
+            <!--<label>
               Source:
               <label id="result_src_offset"></label>
             </label>
@@ -44,44 +87,38 @@
               Destination:
               <label id="result_dst_offset"></label>
             </label>
+            <label>
+              Max bitrate:
+              <label>Down:<label id="result_bitrate_dwn"></label></label>
+              <label>Up:<label id="result_bitrate_up"></label></label>
+            </label>
+            <label>
+              Loss:
+              <label id="result_loss"></label>
+            </label>-->
           </div>
         </div>
-        <div id="button_div">
-          <button id="get_data" type="button" onclick="requestLinkData()">Get data</button>
-          <button onclick="resetAll()">Reset</button>
+        <div id="devices_div" class="input_section" style="background:rgba(206, 231, 255,0.52)">
+          <label>Device</label>
+          <div class="vl"></div>
+          <label class="label-userInput">Source<select id="src_device" class="userInput"></select></label>
+          <label class="label-userInput">Destination<select id="dst_device" class="userInput"></select></label>
         </div>
-      </fieldset>
-    </form>
+      </div>
+      <div id="button_div">
+        <button id="get_data" class="success" onclick="requestLinkData()">Get data</button>
+        <button class="danger" onclick="resetAllData()">Reset</button>
+      </div>
+    </div>
+    <div id="elevdata" class="modal-content_data" style="display:none">
+      <!--<span id="close" onclick="hideElevationData()">&times;</span>-->
+      <div id="elevation-div"></div>
+      <div id="data-summary" class="data-summary"><span class="totlen"><span class="summarylabel">Total Length: </span><span class="summaryvalue" /></span>—<span class="maxele"><span class="summarylabel">Max Elevation: </span><span class="summaryvalue" /></span>—<span class="minele"><span class="summarylabel">Min Elevation: </span><span class="summaryvalue"></span></span></div>
+    </div>
   </div>
-  <div id="elevdata">
-    <span id="close" onclick="hideElevationData()">x</span>
-    <div id="elevation-div"></div>
-    <div id="data-summary" class="data-summary"><span class="totlen"><span class="summarylabel">Total Length: </span><span class="summaryvalue" /></span>—<span class="maxele"><span class="summarylabel">Max Elevation: </span><span class="summaryvalue" /></span>—<span class="minele"><span class="summarylabel">Min Elevation: </span><span class="summaryvalue"></span></span></div>
-  </div>
-  <button id="show_elev_data" style="display: none; clear: both" onclick="showElevationData()">Show terrain profile</button>
   <script>
-    initialize();
-
-    function offsetModeChanged(option) {
-      switch (option) {
-        case 'auto':
-          document.getElementById("manual_offset_div").style.display = 'none';
-          document.getElementById("auto_offset_div").style.display = 'block';
-          break;
-        case 'manual':
-          document.getElementById("auto_offset_div").style.display = 'none';
-          document.getElementById("manual_offset_div").style.display = 'block';
-          break;
-      }
-    }
-    function hideElevationData() {
-      document.getElementById('elevdata').style.display = 'none';
-      document.getElementById('show_elev_data').style.display = 'block';
-    }
-    function showElevationData() {
-      document.getElementById('elevdata').style.display = 'block';
-      document.getElementById('show_elev_data').style.display = 'none';
-    }
+    initMapTerrainProfile();
+    requestDeviceData();
   </script>
 
 </body>
