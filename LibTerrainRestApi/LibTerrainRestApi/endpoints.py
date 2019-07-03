@@ -1,8 +1,7 @@
 import sys
 from flask import request,make_response
 import LibTerrainRestApi.responseGenerator as resGen
-from LibTerrainRestApi.classes.link import Link
-import LibTerrainRestApi.terrain_analysis.ubiquiti as ubi
+from LibTerrainRestApi.link import Link
 
 def compute_link():
     """
