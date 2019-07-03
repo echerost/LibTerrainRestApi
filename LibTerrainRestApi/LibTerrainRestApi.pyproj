@@ -34,16 +34,14 @@
     <Compile Include="config\db_config.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LibTerrainRestApi\classes\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="LibTerrainRestApi\endpoints.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LibTerrainRestApi\classes\link.py">
+    <Compile Include="LibTerrainRestApi\link.py" />
+    <Compile Include="LibTerrainRestApi\responseGenerator.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LibTerrainRestApi\responseGenerator.py">
+    <Compile Include="LibTerrainRestApi\runflask.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LibTerrainRestApi\terrain_analysis\ubiquiti.py" />
@@ -54,10 +52,15 @@
     <Compile Include="runserver.py" />
     <Compile Include="LibTerrainRestApi\__init__.py" />
     <Compile Include="LibTerrainRestApi\views.py" />
+    <Compile Include="LibTerrainRestApi\tests\test_data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LibTerrainRestApi\tests\test_Link.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LibTerrainRestApi\" />
-    <Folder Include="LibTerrainRestApi\classes\" />
     <Folder Include="LibTerrainRestApi\static\css\" />
     <Folder Include="LibTerrainRestApi\static\lib\" />
     <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\" />
@@ -70,6 +73,7 @@
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\tables\" />
+    <Folder Include="LibTerrainRestApi\tests\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />

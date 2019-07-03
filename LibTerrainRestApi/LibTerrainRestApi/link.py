@@ -11,6 +11,24 @@ class Link:
     DEFAULT_LOSS_VALUE = -999.9
     DEFAULT_AUTO_OFFSET = 0
     DEFAULT_INVALID_POINT_HEIGHT = -100 #this value or below
+    DEFAULT_ORIENTATION = 0
+    DEFAULT_BITRATE = 0
+    
+    # input/output rest data name
+    SRC_POINT = 'source'
+    DST_POINT = 'destination'
+    SRC_DEVICE = 'source_device'
+    DST_DEVICE = 'destination_device'
+    SRC_OFFSET = 'source'
+    DST_OFFSET = 'destination'
+    AUTO_OFFSET = 'auto'
+    SRC_ORIENTATION = 'source_orientation'
+    DST_ORIENTATION = 'destination_orientation'
+    LINK_POSSIBLE = 'link_is_possible'
+    LOSS = 'loss'
+    PROFILE = 'profile'
+    OFFSETS = 'offsets'
+    BITRATE = 'maximum_bitrate'
 
     def __init__(self, json_input_data:dict):
         
@@ -18,24 +36,24 @@ class Link:
         s_dev = json_input_data['source_device']
         d_dev = json_input_data['destination_device']
         if not self.device_exists(s_dev) or not self.device_exists(d_dev):
-           raise ValueError('Unknown device')
+            raise ValueError('Unknown device')
         self.src_device :str = s_dev
         self.dst_device :str = d_dev
         # points
-        self.src : shape = shape(json_input_data['source'])
-        self.dst : shape = shape(json_input_data['destination'])
+        self.src : shape = shape(json_input_data[self.SRC_POINT])
+        self.dst : shape = shape(json_input_data[self.DST_POINT])
         # offsets
-        offsets = self.getHeightOffsets(json_input_data['offsets'])
+        offsets = self.getHeightOffsets(json_input_data[self.OFFSETS])
         self.auto_offset = offsets['auto']
         self.src_offset : int = offsets['src']
         self.dst_offset :int = offsets['dst']
  
         self.loss :float = self.DEFAULT_LOSS_VALUE
-        self.src_orientation :float = 0
-        self.dst_orientation :float = 0
+        self.src_orientation :float = self.DEFAULT_ORIENTATION
+        self.dst_orientation :float = self.DEFAULT_ORIENTATION
         self.profile = None
         self.is_possible :bool = False
-        self.bitrate :float = 0
+        self.bitrate :float = self.DEFAULT_BITRATE
         
 
     def link_two_points(self) -> dict : 
@@ -78,8 +96,8 @@ class Link:
                     offset = x
 
         else:
-           # fixed offsets
-           bestLink = STI.get_link(source=src, destination=dst)
+            # fixed offsets
+            bestLink = STI.get_link(source=src, destination=dst)
 
         # if link is possible, set data
         if(bestLink is not None):
@@ -100,17 +118,36 @@ class Link:
         """ link is calculated using fixed or auto offsets? """
         return self.auto_offset > self.DEFAULT_AUTO_OFFSET
 
+    def __eq__(self, other): 
+        if not isinstance(other, Link):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        o=other
+        s=self
+        return (s.is_possible==o.is_possible
+                and s.src==o.src and s.dst==o.dst
+                # device
+                and s.src_device==o.src_device and s.dst_device==o.dst_device
+                # offset
+                and s.auto_offset==o.auto_offset
+                and s.src_offset==o.src_offset and s.dst_offset==o.dst_offset
+                # orientation
+                and s.src_orientation==o.src_orientation
+                and s.dst_orientation==o.dst_orientation
+                # loss + bitrate
+                and s.loss==o.loss and s.bitrate==o.bitrate)
+
     @classmethod
     def getHeightOffsets(cls, offsets:dict) -> dict:
         """ Parses offset data """
         retval = {}
-        if('auto' in offsets):
-            retval['auto'] = offsets['auto']
-            retval['src'] = retval['dst'] = 0
+        if(cls.AUTO_OFFSET in offsets):
+            retval['auto'] = offsets[cls.AUTO_OFFSET]
+            retval['src'] = retval[cls.SRC_OFFSET] = 0
         else:
             retval['auto'] = cls.DEFAULT_AUTO_OFFSET
-            retval['src'] = offsets['source']
-            retval['dst'] = offsets['destination']
+            retval['src'] = offsets[cls.SRC_OFFSET]
+            retval['dst'] = offsets[cls.DST_OFFSET]
         return retval
 
     @classmethod
@@ -120,15 +157,20 @@ class Link:
 
     @classmethod
     def device_exists(cls,device:str) -> bool:
-        global DEVICES
+        cls.load_devices()
         return device in DEVICES                
 
     @classmethod
     def get_devices(cls) -> dict:
         """Get the device codes that the user can choose """
+        cls.load_devices()
+        global DEVICES
+        return DEVICES
+    
+    @classmethod
+    def load_devices(cls):
         global DEVICES
         if DEVICES is None:
             ubi.load_devices()
             DEVICES = ubi.devices
-        return DEVICES
         

@@ -3,7 +3,6 @@
 
 /**
  * Display computed data (speed and offsets)
- * // TODO: add bitrate
  * @param {any} src_offset source computed offset
  * @param {any} dst_offset destination computed offset
  */
