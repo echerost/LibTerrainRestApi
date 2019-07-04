@@ -74,7 +74,7 @@ class Link:
                'optionals': 'dst'}
         
         # try establish link using one or multiple offsets
-        offset = 0
+        best_min_offset :int = 0
         if(self.use_auto_offset()):
             # only to semplify link comparison
             bestLinkLoss = -999
@@ -93,7 +93,7 @@ class Link:
                 if(tmpLink is not None and tmpLink['loss'] > bestLinkLoss):
                     bestLink = tmpLink
                     bestLinkLoss = tmpLink['loss']
-                    offset = x
+                    best_min_offset = x
 
         else:
             # fixed offsets
@@ -102,7 +102,8 @@ class Link:
         # if link is possible, set data
         if(bestLink is not None):
             if(self.use_auto_offset()):
-                self.src_offset = self.dst_offset = offset
+                self.auto_offset = best_min_offset
+                self.src_offset = self.dst_offset = self.auto_offset
             self.loss = round(bestLink['loss'],4)
             self.src_orientation = bestLink['src_orient']
             self.dst_orientation = bestLink['dst_orient']
@@ -122,20 +123,17 @@ class Link:
         if not isinstance(other, Link):
             # don't attempt to compare against unrelated types
             return NotImplemented
-        o=other
-        s=self
-        return (s.is_possible==o.is_possible
-                and s.src==o.src and s.dst==o.dst
+        o = other
+        s = self
+        return (s.is_possible == o.is_possible and s.src == o.src and s.dst == o.dst
                 # device
-                and s.src_device==o.src_device and s.dst_device==o.dst_device
+                and s.src_device == o.src_device and s.dst_device == o.dst_device
                 # offset
-                and s.auto_offset==o.auto_offset
-                and s.src_offset==o.src_offset and s.dst_offset==o.dst_offset
+                and s.auto_offset == o.auto_offset and s.src_offset == o.src_offset and s.dst_offset == o.dst_offset
                 # orientation
-                and s.src_orientation==o.src_orientation
-                and s.dst_orientation==o.dst_orientation
+                and s.src_orientation == o.src_orientation and s.dst_orientation == o.dst_orientation
                 # loss + bitrate
-                and s.loss==o.loss and s.bitrate==o.bitrate)
+                and s.loss == o.loss and s.bitrate == o.bitrate)
 
     @classmethod
     def getHeightOffsets(cls, offsets:dict) -> dict:
@@ -143,7 +141,7 @@ class Link:
         retval = {}
         if(cls.AUTO_OFFSET in offsets):
             retval['auto'] = offsets[cls.AUTO_OFFSET]
-            retval['src'] = retval[cls.SRC_OFFSET] = 0
+            retval['src'] = retval['dst'] = 0
         else:
             retval['auto'] = cls.DEFAULT_AUTO_OFFSET
             retval['src'] = offsets[cls.SRC_OFFSET]
