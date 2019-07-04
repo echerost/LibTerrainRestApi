@@ -11,36 +11,45 @@ class Test_test_Link(unittest.TestCase):
         global STI
         STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING,
                lidar_table = dbConfig.LIDAR_TABLE_NAME)
-    
-    #def test_get_devices(self):
-    #    self.assertEqual(0,0)
 
-    #def test_link_init_auto_offset(input_dict):
-        
+    def test_link_auto_offset(self):
+        data = tdata.a_input
+        test_link = Link(data)
+        test_link = test_link.link_two_points()
 
-    #def test_link_init_manual_offset(input_dict):
-
-    #def test_link_auto_offset(self):
+        link = Link(data)
+        link = self.helper_patch_link(link,tdata.a_link_ok)
+        self.assertEqual(test_link,link)
 
     def test_link_manual_offset(self):
         data = tdata.m_input
         test_link = Link(data)
         test_link = test_link.link_two_points()
 
-        link=Link(data)
-        link=self.helper_patch_link(link,tdata.m_link_ok)
+        link = Link(data)
+        link = self.helper_patch_link(link,tdata.m_link_ok)
         self.assertEqual(test_link,link)
 
     @classmethod
-    def helper_patch_link(cls, link:Link, patch:dict)->Link:
+    def helper_patch_link(cls, link:Link, patch:dict) -> Link:
         """ cache some data in link
             Patch can have only data to change, not all 'Link' instance data
         """
+        # device (antenna)
         if Link.SRC_DEVICE in patch: link.src_device = patch[Link.SRC_DEVICE]
         if Link.DST_DEVICE in patch: link.dst_device = patch[Link.DST_DEVICE]
-        if Link.AUTO_OFFSET in patch: link.auto_offset = patch[Link.AUTO_OFFSET]
-        if Link.SRC_OFFSET in patch:link.src_offset = patch[Link.SRC_OFFSET]
-        if Link.DST_OFFSET in patch:link.dst_offset = patch[Link.DST_OFFSET]
+        # offsets
+        if Link.OFFSETS in patch:
+            offsets=patch[Link.OFFSETS]             
+            if Link.AUTO_OFFSET in offsets:
+                link.auto_offset = offsets[Link.AUTO_OFFSET]
+                link.src_offset =link.dst_offset= offsets[Link.AUTO_OFFSET]
+            else:
+                if Link.SRC_OFFSET in offsets:
+                    link.src_offset = offsets[Link.SRC_OFFSET]
+                if Link.DST_OFFSET in offsets:
+                    link.dst_offset = offsets[Link.DST_OFFSET]
+        
         if Link.LOSS in patch:link.loss = patch[Link.LOSS]
         if Link.SRC_ORIENTATION in patch:link.src_orientation = patch[Link.SRC_ORIENTATION]
         if Link.DST_ORIENTATION in patch:link.dst_orientation = patch[Link.DST_ORIENTATION]

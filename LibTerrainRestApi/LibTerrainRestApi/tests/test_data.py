@@ -34,19 +34,20 @@ a_input = {
                 'coordinates': [11.129399,43.952413]
             },
             Link.OFFSETS: {
-                Link.AUTO_OFFSET: 5
+                Link.AUTO_OFFSET: 10
             },
             Link.SRC_DEVICE: 'AM-IsoStation5AC',
             Link.DST_DEVICE: 'AM-IsoStation5AC'}
 
 a_link_ok = {
             Link.LINK_POSSIBLE: True,
+            Link.SRC_ORIENTATION:(271.6683374483668, 180.21041682791292),
+            Link.DST_ORIENTATION:(91.66833744836678, 179.78958317208708),
+            Link.BITRATE:(86.7, 86.7),
+            Link.LOSS:86.6086,
             Link.OFFSETS: {
-                Link.AUTO_OFFSET: 0
+	            Link.AUTO_OFFSET: 2
             },
-            Link.SRC_ORIENTATION:150,
-            Link.DST_ORIENTATION:150,
-            Link.BITRATE:90
             # TODO: add profile
 }
 
