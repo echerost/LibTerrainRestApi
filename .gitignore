@@ -350,3 +350,4 @@ ASALocalRun/
 healthchecksdb
 /LibTerrainRestApi/LibTerrainRestApi/static/lib/Leaflet.Elevation/leaflet.elevation-0.0.4.src.js
 /LibTerrainRestApi/LibTerrainRestApi/templates/homeOld.html
+/LibTerrainRestApi/LibTerrainRestApi/tests/resources/drivers/geckodriver.exe

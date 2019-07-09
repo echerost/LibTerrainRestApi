@@ -34,6 +34,9 @@
     <Compile Include="config\db_config.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="config\test_config.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LibTerrainRestApi\endpoints.py">
       <SubType>Code</SubType>
     </Compile>
@@ -47,6 +50,9 @@
     <Compile Include="LibTerrainRestApi\terrain_analysis\ubiquiti.py" />
     <Compile Include="LibTerrainRestApi\terrain_analysis\wifi.py" />
     <Compile Include="LibTerrainRestApi\terrain_analysis\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LibTerrainRestApi\tests\test_ui.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="runserver.py" />
@@ -74,6 +80,8 @@
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\tables\" />
     <Folder Include="LibTerrainRestApi\tests\" />
+    <Folder Include="LibTerrainRestApi\tests\resources\" />
+    <Folder Include="LibTerrainRestApi\tests\resources\drivers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
@@ -96,6 +104,7 @@
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-PowerBeam5AC500ISO.json" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\tables\mcs-AC.csv" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\tables\mcs-N.csv" />
+    <Content Include="LibTerrainRestApi\tests\resources\drivers\geckodriver.exe" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -115,6 +115,7 @@ function drawEllipse() {
   var base = d3.selectAll("svg").filter(".background").select("rect");
   var parent = base.select(function () { return this.parentNode; });
   parent.append("ellipse")
+    .attr("id", 'ellipse')
     .attr("cx", mX)
     .attr("cy", mY)
     .attr("rx", length)
@@ -133,7 +134,9 @@ function resetAllData(resetMarkers = true) {
 function resetElevationData(resetMarkers = true) {
   //document.getElementById('elevation-div').innerHTML = '';
   elevation.clear();
-  if (resetMarkers) { markersLayer.clearLayers(); }
+  var ellipse = document.getElementById('ellipse');
+  if (ellipse != null) { ellipse.parentNode.removeChild(ellipse); }
+  if (resetMarkers) { markersLayer.clearLayers(); elevation.layer.remove(); }
   //elevation = L.control.elevation(opts.elevationControl.options);
   //elevation.addTo(map);
   //controlLayer = L.control.layers(null, null, opts.layersControl.options);
