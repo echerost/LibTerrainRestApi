@@ -1,6 +1,8 @@
 from shapely.geometry import shape
+from geoalchemy2.shape import to_shape
+from shapely.wkt import loads
 import libterrain
-import config.db_config as dbConfig
+import configs.config as cfg
 import LibTerrainRestApi.terrain_analysis.ubiquiti as ubi
 
 STI = None
@@ -8,11 +10,12 @@ DEVICES = None
 
 class Link:
     """Link data and operations"""
-    DEFAULT_LOSS_VALUE = -999.9
+    DEFAULT_LOSS_VALUE = 200
     DEFAULT_AUTO_OFFSET = 0
     DEFAULT_INVALID_POINT_HEIGHT = -100 #this value or below
     DEFAULT_ORIENTATION = 0
     DEFAULT_BITRATE = 0
+    DEFAULT_BANDWIDTH = 20
     
     # input/output rest data name
     SRC_POINT = 'source'
@@ -22,6 +25,7 @@ class Link:
     SRC_OFFSET = 'source'
     DST_OFFSET = 'destination'
     AUTO_OFFSET = 'auto'
+    BANDWIDTH = 'bandwidth'
     SRC_ORIENTATION = 'source_orientation'
     DST_ORIENTATION = 'destination_orientation'
     LINK_POSSIBLE = 'link_is_possible'
@@ -30,24 +34,28 @@ class Link:
     OFFSETS = 'offsets'
     BITRATE = 'maximum_bitrate'
 
-    def __init__(self, json_input_data:dict):
+    def __init__(self, inData:dict):
         
         # devices
-        s_dev = json_input_data['source_device']
-        d_dev = json_input_data['destination_device']
+        s_dev = inData[self.SRC_DEVICE]
+        d_dev = inData[self.DST_DEVICE]
         if not self.device_exists(s_dev) or not self.device_exists(d_dev):
             raise ValueError('Unknown device')
         self.src_device :str = s_dev
         self.dst_device :str = d_dev
         # points
-        self.src : shape = shape(json_input_data[self.SRC_POINT])
-        self.dst : shape = shape(json_input_data[self.DST_POINT])
+        self.src : shape = shape(inData[self.SRC_POINT])
+        self.dst : shape = shape(inData[self.DST_POINT])
         # offsets
-        offsets = self.getHeightOffsets(json_input_data[self.OFFSETS])
+        offsets = self.getHeightOffsets(inData[self.OFFSETS])
         self.auto_offset = offsets['auto']
         self.src_offset : int = offsets['src']
         self.dst_offset :int = offsets['dst']
- 
+        # bandwidth
+        self.bandwidth = (inData[self.BANDWIDTH]
+                        if self.BANDWIDTH in inData
+                        else self.DEFAULT_BANDWIDTH)
+        # computed values by libterrain
         self.loss :float = self.DEFAULT_LOSS_VALUE
         self.src_orientation :float = self.DEFAULT_ORIENTATION
         self.dst_orientation :float = self.DEFAULT_ORIENTATION
@@ -59,12 +67,12 @@ class Link:
     def link_two_points(self) -> dict : 
         """try to establish a link between two points""" 
         bestLink = None
-
+        #buildings = self.get_building(self.src, self.dst)
         # terrain interface initialization
         global STI
         if(STI is None):
-            STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING,
-               lidar_table = dbConfig.LIDAR_TABLE_NAME)
+            STI = libterrain.SingleTerrainInterface(cfg.DB_CONNECTION_STRING,
+               lidar_table = cfg.LIDAR_TABLE_NAME)
 
         src = {'coords': self.src,
                'height': self.src_offset,
@@ -72,25 +80,29 @@ class Link:
         dst = {'coords': self.dst,
                'height': self.dst_offset,
                'optionals': 'dst'}
+
+        
         
         # try establish link using one or multiple offsets
         best_min_offset :int = 0
         if(self.use_auto_offset()):
             # only to semplify link comparison
-            bestLinkLoss = -999
+            bestLinkLoss = self.DEFAULT_LOSS_VALUE
             # search for best elevation offset capped by self.auto_offset
             # incrementing both points offsets each time starting from zero
             for x in range(self.auto_offset + 1):
                 # update points elevation
-                src['height'] = self.src_offset + x
-                dst['height'] = self.dst_offset + x
+                #src['height'] = self.src_offset + x
+                #dst['height'] = self.dst_offset + x
+                src['height'] = dst['height'] = x
 
                 # attempt to establish link
                 tmpLink = STI.get_link(source=src, destination=dst)
-                #print("X: " + str(x) + "; Valid: "+ str(tmpLink!=None))
+                if(tmpLink is not None):
+                    print("Valid link; Offset: " + str(x) + "  Loss: " + str(tmpLink['loss']))
 
                 # switch if new link is better than previous
-                if(tmpLink is not None and tmpLink['loss'] > bestLinkLoss):
+                if(tmpLink is not None and tmpLink['loss'] < bestLinkLoss):
                     bestLink = tmpLink
                     bestLinkLoss = tmpLink['loss']
                     best_min_offset = x
@@ -100,6 +112,7 @@ class Link:
             bestLink = STI.get_link(source=src, destination=dst)
 
         # if link is possible, set data
+        print('Db interazione end')
         if(bestLink is not None):
             if(self.use_auto_offset()):
                 self.auto_offset = best_min_offset
@@ -171,4 +184,22 @@ class Link:
         if DEVICES is None:
             ubi.load_devices()
             DEVICES = ubi.devices
-        
+
+    def get_building(self, src, dst):
+        bi = libterrain.OSMInterface(cfg.DB_CONNECTION_STRING)
+        src_b = bi.get_buildings(src)
+        dst_b = bi.get_buildings(dst)
+        #src_b = bi.get_building_gid(src_b[0].gid)
+        #s_geom_db = to_shape(build.geom)
+        #s_geom = loads(s_geom_db.wkt)
+        src_mex:string='SRC: '
+        if(src_b):
+            src_mex = src_mex + str(src_b[0].height)
+        else:
+            src_mex = src_mex + 'NO BUILD'
+        dst_mex='DST: '
+        if(dst_b):
+            dst_mex= dst_mex + str(dst_b[0].height)
+        else:
+            dst_mex=dst_mex + 'NO BUILD'
+        print(src_mex + '; ' + dst_mex)     

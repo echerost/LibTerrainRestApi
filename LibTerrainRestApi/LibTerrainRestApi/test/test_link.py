@@ -1,16 +1,16 @@
 import unittest
 import libterrain
 from LibTerrainRestApi.link import Link
-import LibTerrainRestApi.tests.test_data as tdata
-import config.db_config as dbConfig
+import LibTerrainRestApi.test.testdata as tdata
+import configs.config as cfg
 
 STI = None
-class Test_test_Link(unittest.TestCase):
+class Test_test_link(unittest.TestCase):
     
     def setUp(self):
         global STI
-        STI = libterrain.SingleTerrainInterface(dbConfig.DB_CONNECTION_STRING,
-               lidar_table = dbConfig.LIDAR_TABLE_NAME)
+        STI = libterrain.SingleTerrainInterface(cfg.DB_CONNECTION_STRING,
+               lidar_table = cfg.LIDAR_TABLE_NAME)
 
     def test_link_auto_offset(self):
         data = tdata.a_input

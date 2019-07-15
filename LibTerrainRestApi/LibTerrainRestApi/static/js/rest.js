@@ -26,7 +26,7 @@ function requestLinkData() {
           // link non possibile
           if (!profile.link_is_possible) {
             alert("Connection is not possible");
-            resetAllData();
+            //resetElevationData(false);
             return false;
           }
           resetElevationData(false);
@@ -107,7 +107,9 @@ function createRequestData() {
         destination: parseInt(document.getElementById('manual_dst_offset').value)
       };
       break;
-  }
+  };
+  // bandwidth
+  data['bandwidth'] = parseFloat(document.getElementById('bandwidth').value);
   // devices
   data['source_device'] = document.getElementById('src_device').value;
   data['destination_device'] = document.getElementById('dst_device').value;

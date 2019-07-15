@@ -85,3 +85,7 @@ function showOffsetView() {
 function hideElementById(elementID) {
   document.getElementById(elementID).style.display = 'none';
 }
+
+function closeModalAndReset() {
+  resetAllData();
+}

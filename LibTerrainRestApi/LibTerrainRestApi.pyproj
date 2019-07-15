@@ -31,10 +31,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="config\db_config.py">
+    <Compile Include="configs\config.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="config\test_config.py">
+    <Compile Include="configs\config_test.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LibTerrainRestApi\endpoints.py">
@@ -52,16 +52,19 @@
     <Compile Include="LibTerrainRestApi\terrain_analysis\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LibTerrainRestApi\tests\test_ui.py">
+    <Compile Include="LibTerrainRestApi\test\test_ui.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LibTerrainRestApi\test\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="LibTerrainRestApi\__init__.py" />
     <Compile Include="LibTerrainRestApi\views.py" />
-    <Compile Include="LibTerrainRestApi\tests\test_data.py">
+    <Compile Include="LibTerrainRestApi\test\testdata.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LibTerrainRestApi\tests\test_Link.py">
+    <Compile Include="LibTerrainRestApi\test\test_link.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -70,23 +73,25 @@
     <Folder Include="LibTerrainRestApi\static\css\" />
     <Folder Include="LibTerrainRestApi\static\lib\" />
     <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\" />
+    <Folder Include="LibTerrainRestApi\static\images\" />
     <Folder Include="LibTerrainRestApi\templates\" />
     <Folder Include="LibTerrainRestApi\static\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
-    <Folder Include="config\" />
+    <Folder Include="configs\" />
     <Folder Include="LibTerrainRestApi\static\js\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\" />
     <Folder Include="LibTerrainRestApi\terrain_analysis\80211\tables\" />
-    <Folder Include="LibTerrainRestApi\tests\" />
-    <Folder Include="LibTerrainRestApi\tests\resources\" />
-    <Folder Include="LibTerrainRestApi\tests\resources\drivers\" />
+    <Folder Include="LibTerrainRestApi\test\" />
+    <Folder Include="LibTerrainRestApi\test\resources\" />
+    <Folder Include="LibTerrainRestApi\test\resources\drivers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="LibTerrainRestApi\static\css\home.css" />
     <Content Include="LibTerrainRestApi\static\css\modal.css" />
+    <Content Include="LibTerrainRestApi\static\images\map_marker.png" />
     <Content Include="LibTerrainRestApi\static\js\home.js" />
     <Content Include="LibTerrainRestApi\static\js\mapElevation.js" />
     <Content Include="LibTerrainRestApi\static\js\rest.js" />
@@ -104,7 +109,7 @@
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-PowerBeam5AC500ISO.json" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\tables\mcs-AC.csv" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\tables\mcs-N.csv" />
-    <Content Include="LibTerrainRestApi\tests\resources\drivers\geckodriver.exe" />
+    <Content Include="LibTerrainRestApi\test\resources\drivers\geckodriver.exe" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

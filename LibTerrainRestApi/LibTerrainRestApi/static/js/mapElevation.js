@@ -128,7 +128,8 @@ function resetAllData(resetMarkers = true) {
   resetElevationData(resetMarkers);
   resetOffsetView();
   document.getElementById('modal_div').style.display = 'none';
-  activateMap();
+  activateMap(false);
+  map.setZoom(17);
 }
 
 function resetElevationData(resetMarkers = true) {
@@ -136,13 +137,14 @@ function resetElevationData(resetMarkers = true) {
   elevation.clear();
   var ellipse = document.getElementById('ellipse');
   if (ellipse != null) { ellipse.parentNode.removeChild(ellipse); }
-  if (resetMarkers) { markersLayer.clearLayers(); elevation.layer.remove(); }
+  if (resetMarkers) {
+    markersLayer.clearLayers(); if (elevation.layer) { elevation.layer.remove(); } }
   //elevation = L.control.elevation(opts.elevationControl.options);
   //elevation.addTo(map);
   //controlLayer = L.control.layers(null, null, opts.layersControl.options);
   showElevationView(false);
 }
 
-function activateMap() {
-  canSelectPoints = true;
+function activateMap(activate=true) {
+  canSelectPoints = activate;
 }

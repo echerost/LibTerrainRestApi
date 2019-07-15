@@ -19,29 +19,30 @@
 
 <body>
   <div id="SideNav" class="sidenav">
-    <a onclick="activateMap()" href="#" id="ElevBtn">Elevation profile</a>
+    <!--<a onclick="activateMap()" href="#" id="ElevBtn" />-->
+    <button id="ElevBtn" onclick="activateMap()"></button>
   </div>
   <div id="map"></div>
   <div id="modal_div" class="modal" style="display:none">
     <div class="modal-content">
-      <span class="close" onclick="hideElementById('modal_div')">&times;</span>
+      <span class="close" onclick="closeModalAndReset()">&times;</span>
       <div class="flex">
         <div id="offset_mode_div" class="input_section" style="background:rgba(230, 215, 154, 0.52)">
-          <label>Offset</label>
+          <label>Height of the antenna pole</label>
           <div class="vl"></div>
-          <label id="offset_mode_lb" class="label-userInput">
-            Offset mode:
+          <label id="offset_mode_lb" class="l-usrIn">
+            Mode:
             <select id="offset_mode" class="userInput selector" onchange="offsetModeChanged(this.value)">
-              <option value="auto" selected>Auto offset</option>
-              <option value="manual">Manual offset</option>
+              <option value="auto" selected>Auto</option>
+              <option value="manual">Manual</option>
             </select>
           </label>
           <div id="auto_offset_div" class="offset_mode_div">
-            <label class="label-userInput">Range max (10):<input type="number" id="auto_offset" class="userInput" min="0" max="10" step="1" value="10" /></label>
+            <label class="l-usrIn">Range max (10):<input type="number" id="auto_offset" class="userInput" min="0" max="10" step="1" value="10" /></label>
           </div>
           <div id="manual_offset_div" class="offset_mode_div" style="display: none">
-            <label class="label-userInput">Source<input type="number" id="manual_src_offset" class="userInput" min="0" max="10" step="1" required /></label>
-            <label class="label-userInput">Destination<input type="number" id="manual_dst_offset" class="userInput" min="0" max="10" step="1" required /></label>
+            <label class="l-usrIn">Source<input type="number" id="manual_src_offset" class="userInput" min="0" max="10" step="1" required /></label>
+            <label class="l-usrIn">Destination<input type="number" id="manual_dst_offset" class="userInput" min="0" max="10" step="1" required /></label>
           </div>
           <div id="result_offset_div" class="offset_mode_div" style="display: none">
             <table>
@@ -79,35 +80,19 @@
                 <td>Up:<label id="result_bitrate_up"></label></td>
               </tr>
             </table>
-            <!--<label>
-              Source:
-              <label id="result_src_offset"></label>
-            </label>
-            <label>
-              Destination:
-              <label id="result_dst_offset"></label>
-            </label>
-            <label>
-              Max bitrate:
-              <label>Down:<label id="result_bitrate_dwn"></label></label>
-              <label>Up:<label id="result_bitrate_up"></label></label>
-            </label>
-            <label>
-              Loss:
-              <label id="result_loss"></label>
-            </label>-->
           </div>
         </div>
         <div id="devices_div" class="input_section" style="background:rgba(206, 231, 255,0.52)">
           <label>Device</label>
           <div class="vl"></div>
-          <label class="label-userInput">Source<select id="src_device" class="userInput"></select></label>
-          <label class="label-userInput">Destination<select id="dst_device" class="userInput"></select></label>
+          <label class="l-usrIn">Source<select id="src_device" class="userInput"></select></label>
+          <label class="l-usrIn">Destination<select id="dst_device" class="userInput"></select></label>
+          <label class="l-usrIn">Bandwidth<input type="number" id="bandwidth" class="userInput" min="0" step="1" value="20" required /></label>
         </div>
       </div>
       <div id="button_div">
         <button id="get_data" class="success" onclick="requestLinkData()">Get data</button>
-        <button class="danger" onclick="resetAllData()">Reset</button>
+        <button class="danger" onclick="closeModalAndReset()">Reset</button>
       </div>
     </div>
     <div id="elevdata" class="modal-content_data" style="display:none">

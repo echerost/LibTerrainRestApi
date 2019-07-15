@@ -7,7 +7,7 @@ import LibTerrainRestApi.terrain_analysis.wifi as wifi
 # devices_airfiber = ["AF-11FX", "AF-24", "AF-24HD", "AF-2X", "AF-3X",
 #                     "AF-4X", "AF-5_AF-5U", "AF-5X",
 #                     "AF-5XHD"]
-# 
+#
 # devices_airmax = ["AM-IsoStation5AC",
 #                   "AM-IsoStationM5", "AM-LiteBeam5AC16120",
 #                   "AM-LiteBeam5AC23", "AM-LiteBeam5ACGEN2",
@@ -47,7 +47,7 @@ json_folder = '80211/devices_ubiquiti'
 def read_device(x):
     try:
         dev_path = x + '.json'
-        full_path= os.path.join(os.path.dirname(os.path.abspath(__file__)),json_folder, dev_path)
+        full_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),json_folder, dev_path)
         file = open(full_path)
         res = json.loads(file.read())
         file.close()
@@ -176,8 +176,7 @@ def get_feasible_modulation_list(x, y, pathloss, cap_tx_power=True):
             tx_pow = i[1] + get_attribute(x, 'gain_tx')
             if cap_tx_power:
                 tx_pow = min(tx_pow,
-                             wifi.tx_power_regulation_eu[
-                                 get_attribute(x, 'frequency')])
+                             wifi.tx_power_regulation_eu[get_attribute(x, 'frequency')])
             pr = tx_pow + get_attribute(y, 'gain_rx') - pathloss
             if pr > get_rx_power_mod(y, i[0]):
                 res.append(i[0])
@@ -187,8 +186,7 @@ def get_feasible_modulation_list(x, y, pathloss, cap_tx_power=True):
             tx_pow = get_tx_power_mod(x, i) + get_attribute(y, 'gain_tx')
             if cap_tx_power:
                 tx_pow = min(tx_pow,
-                             wifi.tx_power_regulation_eu[
-                                 get_attribute(x, 'frequency')])
+                             wifi.tx_power_regulation_eu[get_attribute(x, 'frequency')])
             pr = tx_pow + get_attribute(y, 'gain_rx') - pathloss
             if pr > get_rx_power_mod(y, i):
                 res.append(i)
@@ -197,8 +195,7 @@ def get_feasible_modulation_list(x, y, pathloss, cap_tx_power=True):
             tx_pow = i + get_attribute(x, 'gain_tx')
             if cap_tx_power:
                 tx_pow = min(tx_pow,
-                             wifi.tx_power_regulation_eu[
-                                 get_attribute(x, 'frequency')])
+                             wifi.tx_power_regulation_eu[get_attribute(x, 'frequency')])
             pr = tx_powe + get_attribute(x, 'gain_rx') - pathloss
             for j in get_rx_power_af_mod(x, i[0]):
                 if pr > j[1]:
@@ -232,6 +229,12 @@ def get_maximum_rate(pathloss, src, dst):
     src_streams = int(get_attribute(src, 'max_streams'))
     dst_streams = int(get_attribute(dst, 'max_streams'))
     streams = min(src_streams, dst_streams)
+    #for x in possible_mod_dw:
+    #    wi = wifi.mcs_AC
+    #    wi_x = wifi.mcs_AC[x]
+    #    wi_x_streams = wifi.mcs_AC[x][streams]
+    #    wi_x_streams_band = wifi.mcs_AC[x][streams][wifi.default_channel_width]
+
     dw_rate = max([wifi.mcs_AC[x][streams][wifi.default_channel_width]
                   for x in possible_mod_dw])
     up_rate = max([wifi.mcs_AC[x][streams][wifi.default_channel_width]
@@ -245,7 +248,8 @@ def get_fastest_link_hardware(pathloss, target=None):
     tmp = []
     if target:
         # FIXME restructure this if
-        # Find best source wrt target and Estimate the rate and mod for a given link
+        # Find best source wrt target and Estimate the rate and mod for a given
+        # link
         for d in devices:
             possible_mod = get_feasible_modulation_list(d, target, pathloss)
             if possible_mod:
@@ -263,19 +267,14 @@ def get_fastest_link_hardware(pathloss, target=None):
             if get_attribute(d[0], 'technology') == 'AirMax ac':
                 streams = int(get_attribute(d[0], 'max_streams'))
                 for MCS in d[1]:
-                    mod = wifi.mcs_AC[MCS][streams]\
-                                            [wifi.default_channel_width]
+                    mod = wifi.mcs_AC[MCS][streams][wifi.default_channel_width]
                     if not mod:
                         continue
-                    if max_mod[0] < wifi.mcs_AC[MCS][streams]\
-                                            [wifi.default_channel_width]:
-                        max_mod = [wifi.mcs_AC[MCS][streams]\
-                                            [wifi.default_channel_width]]
+                    if max_mod[0] < wifi.mcs_AC[MCS][streams][wifi.default_channel_width]:
+                        max_mod = [wifi.mcs_AC[MCS][streams][wifi.default_channel_width]]
                         device = [(d[0], MCS)]
-                    if max_mod[0] == wifi.mcs_AC[MCS][streams]\
-                                              [wifi.default_channel_width]:
-                        max_mod.append(wifi.mcs_AC[MCS][streams]\
-                                            [wifi.default_channel_width])
+                    if max_mod[0] == wifi.mcs_AC[MCS][streams][wifi.default_channel_width]:
+                        max_mod.append(wifi.mcs_AC[MCS][streams][wifi.default_channel_width])
                         device.append((d[0], MCS))
         if not device:
             return 0, ''
