@@ -20,10 +20,26 @@ var opts = {
 };
 
 function initMapTerrainProfile() {
-  map = L.map('map').on('locationerror ', setDefaultMapView)
-    .on('click', addMarker).on('eledata_loaded', eledata_loaded).locate({ setView: true });//.on('eledata_reloaded', drawEllipse)
+  map = L.map('map').on('locationerror ', setDefaultMapView).on('eledata_loaded', eledata_loaded).locate({ setView: true });//.on('click', addMarker).on('eledata_reloaded', drawEllipse)
   setMapTileLayer(map);
-  markersLayer = L.featureGroup().on('click', removeMarker).addTo(map);
+
+  // add leaflet.pm controls with some options to the map
+  map.pm.addControls({
+    position: 'topleft',
+    drawPolyline: false,
+    drawRectangle: false,
+    drawPolygon: false,
+    drawCircle: false,
+    editMode: false,
+    dragMode: false,
+    cutPolygon: false,
+    removalMode: false,
+  });
+
+  // listen to vertexes being added to currently drawn layer (called workingLayer)
+  map.on('pm:create', onMarkerAdded);
+
+  markersLayer = L.featureGroup();/*.addTo(map);*/
 
   elevation = L.control.elevation(opts.elevationControl.options);
   elevation.addTo(map);
@@ -53,16 +69,40 @@ function setDefaultMapView() {
   map.setView([43.968526774903815, 11.125824451446533], 15);
 }
 
-function addMarker(e) {
-  // can select points only if user clicked button in navbar
-  if (!canSelectPoints) {
-    alert("See navbar on the left");
-    return;
-  }
+function onMarkerAdded(e) {
+  var marker = e.layer;
   if (markersLayer.getLayers().length > 2) {
     window.alert("Click a marker to delete and retry");
-    return;
+    map.removeLayer(marker);
+    return false;
   }
+
+  marker.on('click', removeMarker);
+  markersLayer.addLayer(marker);
+
+  // after two selected points shows offsets and devices form
+  if (markersLayer.getLayers().length >= 2) {
+    showOffsetView();
+  }
+}
+
+function addMarker(e) {
+  // can select points only if user clicked button in navbar
+  //if (!canSelectPoints) {
+  //  alert("See navbar on the left");
+  //  return;
+  //}
+  if (markersLayer.getLayers().length > 2) {
+    window.alert("Click a marker to delete and retry");
+    return false;
+  }
+
+  // listen to vertexes being added to currently drawn layer (called workingLayer)
+  map.on('pm:drawstart', ({ workingLayer }) => {
+    workingLayer.on('pm:vertexadded', e => {
+    });
+  });
+
   var marker = L.marker(e.latlng);
   marker.on('click', removeMarker);
   marker.bindPopup(e.latlng).openPopup();
@@ -75,8 +115,9 @@ function addMarker(e) {
 }
 
 function removeMarker(e) {
-  var clickedMarker = this;
-  markersLayer.removeLayer(clickedMarker);
+  var marker = this;
+  markersLayer.removeLayer(marker);
+  map.removeLayer(marker)
 }
 
 function eledata_loaded(e) {
@@ -132,15 +173,16 @@ function resetAllData(resetMarkers = true) {
 }
 
 function resetElevationData(resetMarkers = true) {
-  //document.getElementById('elevation-div').innerHTML = '';
   elevation.clear();
   var ellipse = document.getElementById('ellipse');
   if (ellipse != null) { ellipse.parentNode.removeChild(ellipse); }
   if (resetMarkers) {
-    markersLayer.clearLayers(); if (elevation.layer) { elevation.layer.remove(); } }
-  //elevation = L.control.elevation(opts.elevationControl.options);
-  //elevation.addTo(map);
-  //controlLayer = L.control.layers(null, null, opts.layersControl.options);
+    if (markersLayer.getLayers().length < 1) { return; }
+    var markers = markersLayer.getLayers();
+    for (marker of markers) { map.removeLayer(marker); }
+    markersLayer.clearLayers();
+    if (elevation.layer) { elevation.layer.remove(); }
+  }
   showElevationView(false);
 }
 

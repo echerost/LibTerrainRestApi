@@ -93,14 +93,10 @@ class Link:
             # incrementing both points offsets each time starting from zero
             for x in range(self.auto_offset + 1):
                 # update points elevation
-                #src['height'] = self.src_offset + x
-                #dst['height'] = self.dst_offset + x
                 src['height'] = dst['height'] = x
 
                 # attempt to establish link
                 tmpLink = STI.get_link(source=src, destination=dst)
-                if(tmpLink is not None):
-                    print("Valid link; Offset: " + str(x) + "  Loss: " + str(tmpLink['loss']))
 
                 # switch if new link is better than previous
                 if(tmpLink is not None and tmpLink['loss'] < bestLinkLoss):

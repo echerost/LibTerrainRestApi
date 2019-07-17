@@ -83,13 +83,12 @@ button {
   clear: both;
 }
 
-#SideNav button {
+/*#SideNav button {
   position: absolute;
   left: -3px;
   top: 120px;
   width: 50px;
   height: 80px;
-  /*background-color: #77e5fe;*/
   background-image: url(../images/map_marker.png);
   background-size: contain;
   background-repeat: no-repeat;
@@ -98,7 +97,7 @@ button {
   border-color: #2e6da4;
   cursor:pointer;
   z-index: 1500;
-}
+}*/
 
   /*#SideNav a:hover {
     left: 0;
