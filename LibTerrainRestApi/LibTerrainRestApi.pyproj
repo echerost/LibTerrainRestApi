@@ -73,7 +73,6 @@
     <Folder Include="LibTerrainRestApi\static\css\" />
     <Folder Include="LibTerrainRestApi\static\lib\" />
     <Folder Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\" />
-    <Folder Include="LibTerrainRestApi\static\images\" />
     <Folder Include="LibTerrainRestApi\templates\" />
     <Folder Include="LibTerrainRestApi\static\" />
     <Folder Include="LibTerrainRestApi\openapi\" />
@@ -91,7 +90,6 @@
     <Content Include="LibTerrainRestApi\openapi\swagger.yaml" />
     <Content Include="LibTerrainRestApi\static\css\home.css" />
     <Content Include="LibTerrainRestApi\static\css\modal.css" />
-    <Content Include="LibTerrainRestApi\static\images\map_marker.png" />
     <Content Include="LibTerrainRestApi\static\js\home.js" />
     <Content Include="LibTerrainRestApi\static\js\mapElevation.js" />
     <Content Include="LibTerrainRestApi\static\js\rest.js" />

@@ -53,8 +53,7 @@ class Link:
         self.dst_offset :int = offsets['dst']
         # bandwidth
         self.bandwidth = (inData[self.BANDWIDTH]
-                        if self.BANDWIDTH in inData
-                            and ubi.is_valid_channel_width(inData[self.BANDWIDTH])
+                        if self.BANDWIDTH in inData and ubi.is_valid_channel_width(inData[self.BANDWIDTH])
                         else self.DEFAULT_BANDWIDTH)
         # computed values by libterrain
         self.loss :float = self.DEFAULT_LOSS_VALUE
@@ -64,11 +63,10 @@ class Link:
         self.is_possible :bool = False
         self.bitrate :float = self.DEFAULT_BITRATE
         
-
     def link_two_points(self) -> dict : 
         """try to establish a link between two points""" 
         bestLink = None
-        #buildings = self.get_building(self.src, self.dst)
+
         # terrain interface initialization
         global STI
         if(STI is None):
@@ -81,8 +79,6 @@ class Link:
         dst = {'coords': self.dst,
                'height': self.dst_offset,
                'optionals': 'dst'}
-
-        
         
         # try establish link using one or multiple offsets
         best_min_offset :int = 0
@@ -109,7 +105,6 @@ class Link:
             bestLink = STI.get_link(source=src, destination=dst)
 
         # if link is possible, set data
-        print('Db interazione end')
         if(bestLink is not None):
             if(self.use_auto_offset()):
                 self.auto_offset = best_min_offset
@@ -118,7 +113,8 @@ class Link:
             self.src_orientation = bestLink['src_orient']
             self.dst_orientation = bestLink['dst_orient']
             self.is_possible = True
-            profile = list(filter(self.removeInvalidProfilePoints, bestLink['profile']))
+            profile = list(filter(lambda x:len(x) == 3 and x[2] > self.DEFAULT_INVALID_POINT_HEIGHT,
+                                bestLink['profile']))
             self.profile = profile
             
             # devices and bitrate
@@ -159,11 +155,6 @@ class Link:
         return retval
 
     @classmethod
-    def removeInvalidProfilePoints(cls,point):
-        """ Removes all profile points having invalid height """
-        return True if point[2] > cls.DEFAULT_INVALID_POINT_HEIGHT else False
-
-    @classmethod
     def device_exists(cls,device:str) -> bool:
         cls.load_devices()
         return device in DEVICES                
@@ -172,7 +163,6 @@ class Link:
     def get_devices(cls) -> dict:
         """Get the device codes that the user can choose """
         cls.load_devices()
-        global DEVICES
         return DEVICES
     
     @classmethod
@@ -182,21 +172,21 @@ class Link:
             ubi.load_devices()
             DEVICES = ubi.devices
 
-    def get_building(self, src, dst):
-        bi = libterrain.OSMInterface(cfg.DB_CONNECTION_STRING)
-        src_b = bi.get_buildings(src)
-        dst_b = bi.get_buildings(dst)
-        #src_b = bi.get_building_gid(src_b[0].gid)
-        #s_geom_db = to_shape(build.geom)
-        #s_geom = loads(s_geom_db.wkt)
-        src_mex:string='SRC: '
-        if(src_b):
-            src_mex = src_mex + str(src_b[0].height)
-        else:
-            src_mex = src_mex + 'NO BUILD'
-        dst_mex='DST: '
-        if(dst_b):
-            dst_mex= dst_mex + str(dst_b[0].height)
-        else:
-            dst_mex=dst_mex + 'NO BUILD'
-        print(src_mex + '; ' + dst_mex)     
+    #def get_building(self, src, dst):
+    #    bi = libterrain.OSMInterface(cfg.DB_CONNECTION_STRING)
+    #    src_b = bi.get_buildings(src)
+    #    dst_b = bi.get_buildings(dst)
+    #    #src_b = bi.get_building_gid(src_b[0].gid)
+    #    #s_geom_db = to_shape(build.geom)
+    #    #s_geom = loads(s_geom_db.wkt)
+    #    src_mex:string='SRC: '
+    #    if(src_b):
+    #        src_mex = src_mex + str(src_b[0].height)
+    #    else:
+    #        src_mex = src_mex + 'NO BUILD'
+    #    dst_mex='DST: '
+    #    if(dst_b):
+    #        dst_mex= dst_mex + str(dst_b[0].height)
+    #    else:
+    #        dst_mex=dst_mex + 'NO BUILD'
+    #    print(src_mex + '; ' + dst_mex)     

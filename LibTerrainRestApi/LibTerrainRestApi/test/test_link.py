@@ -30,6 +30,11 @@ class Test_test_link(unittest.TestCase):
         link = self.helper_patch_link(link,tdata.m_link_ok)
         self.assertEqual(test_link,link)
 
+    def test_use_auto_offset(self):
+        data = tdata.a_input
+        link = Link(data)
+        self.assertTrue(link.use_auto_offset())       
+
     @classmethod
     def helper_patch_link(cls, link:Link, patch:dict) -> Link:
         """ cache some data in link
