@@ -54,6 +54,7 @@ class Link:
         # bandwidth
         self.bandwidth = (inData[self.BANDWIDTH]
                         if self.BANDWIDTH in inData
+                            and ubi.is_valid_channel_width(inData[self.BANDWIDTH])
                         else self.DEFAULT_BANDWIDTH)
         # computed values by libterrain
         self.loss :float = self.DEFAULT_LOSS_VALUE
@@ -125,7 +126,7 @@ class Link:
             self.profile = profile
             
             # devices and bitrate
-            self.bitrate = ubi.get_maximum_rate(abs(self.loss), self.src_device, self.dst_device)
+            self.bitrate = ubi.get_maximum_rate(abs(self.loss), self.src_device, self.dst_device, self.bandwidth)
         return self
 
     def use_auto_offset(self) -> bool:

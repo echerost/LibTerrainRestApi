@@ -221,7 +221,7 @@ def check_link(x, y, pathloss):
         return True
 
 
-def get_maximum_rate(pathloss, src, dst):
+def get_maximum_rate(pathloss, src, dst, channel_width=wifi.default_channel_width):
     possible_mod_dw = get_feasible_modulation_list(src, dst, pathloss)
     possible_mod_up = get_feasible_modulation_list(src, dst, pathloss)
     if not (possible_mod_dw and possible_mod_up):
@@ -235,9 +235,9 @@ def get_maximum_rate(pathloss, src, dst):
     #    wi_x_streams = wifi.mcs_AC[x][streams]
     #    wi_x_streams_band = wifi.mcs_AC[x][streams][wifi.default_channel_width]
 
-    dw_rate = max([wifi.mcs_AC[x][streams][wifi.default_channel_width]
+    dw_rate = max([wifi.mcs_AC[x][streams][channel_width]
                   for x in possible_mod_dw])
-    up_rate = max([wifi.mcs_AC[x][streams][wifi.default_channel_width]
+    up_rate = max([wifi.mcs_AC[x][streams][channel_width]
                   for x in possible_mod_up])
     return (dw_rate, up_rate)
 
@@ -292,3 +292,6 @@ def print_device_list():
         res[i] = get_attribute(i, 'average_price')
     for n, p in sorted(res.items(), key=lambda x: x[1]):
         print(n, " ", p)
+
+def is_valid_channel_width(channel_width):
+    return channel_width in wifi.indipendent_channels_EU.keys()

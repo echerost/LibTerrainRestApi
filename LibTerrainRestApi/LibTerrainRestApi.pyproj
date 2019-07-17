@@ -97,7 +97,6 @@
     <Content Include="LibTerrainRestApi\static\js\rest.js" />
     <Content Include="LibTerrainRestApi\static\lib\Leaflet.Ellipse\l.ellipse.min.js" />
     <Content Include="LibTerrainRestApi\templates\home.html" />
-    <Content Include="LibTerrainRestApi\templates\homeOld.html" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-IsoStation5AC.json" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-IsoStation5AC_90.json" />
     <Content Include="LibTerrainRestApi\terrain_analysis\80211\devices_ubiquiti\AM-LiteBeam5ACGEN2.json" />

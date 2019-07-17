@@ -128,7 +128,6 @@ function resetAllData(resetMarkers = true) {
   resetElevationData(resetMarkers);
   resetOffsetView();
   document.getElementById('modal_div').style.display = 'none';
-  activateMap(false);
   map.setZoom(17);
 }
 
@@ -145,6 +144,6 @@ function resetElevationData(resetMarkers = true) {
   showElevationView(false);
 }
 
-function activateMap(activate=true) {
-  canSelectPoints = activate;
+function activateMap() {
+  canSelectPoints = true;
 }

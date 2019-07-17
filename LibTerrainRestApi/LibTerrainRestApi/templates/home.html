@@ -87,7 +87,14 @@
           <div class="vl"></div>
           <label class="l-usrIn">Source<select id="src_device" class="userInput"></select></label>
           <label class="l-usrIn">Destination<select id="dst_device" class="userInput"></select></label>
-          <label class="l-usrIn">Bandwidth<input type="number" id="bandwidth" class="userInput" min="0" step="1" value="20" required /></label>
+          <label class="l-usrIn">Bandwidth (MHz)
+            <select id="bandwidth" class="userInput">
+              <option value="20" selected>20</option>
+              <option value="40">40</option>
+              <option value="80">80</option>
+              <option value="160">160</option>
+            </select>
+          </label>
         </div>
       </div>
       <div id="button_div">
