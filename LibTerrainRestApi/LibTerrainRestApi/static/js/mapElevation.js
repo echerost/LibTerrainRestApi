@@ -20,7 +20,7 @@ var opts = {
 };
 
 function initMapTerrainProfile() {
-  map = L.map('map').on('locationerror ', setDefaultMapView).on('eledata_loaded', eledata_loaded).locate({ setView: true });//.on('click', addMarker).on('eledata_reloaded', drawEllipse)
+  map = L.map('map').on('locationerror ', setDefaultMapView).on('eledata_loaded', eledata_loaded).on('pm:create', onMarkerAdded).locate({ setView: true });//.on('click', addMarker).on('eledata_reloaded', drawEllipse)
   setMapTileLayer(map);
 
   // add leaflet.pm controls with some options to the map
@@ -37,7 +37,7 @@ function initMapTerrainProfile() {
   });
 
   // listen to vertexes being added to currently drawn layer (called workingLayer)
-  map.on('pm:create', onMarkerAdded);
+  //map.on('pm:create', onMarkerAdded);
 
   markersLayer = L.featureGroup();/*.addTo(map);*/
 

@@ -35,12 +35,14 @@ class Link:
     BITRATE = 'maximum_bitrate'
 
     def __init__(self, inData:dict):
+        if(type(inData) is not dict):
+            raise TypeError('input data must be a dict')
         
         # devices
         s_dev = inData[self.SRC_DEVICE]
         d_dev = inData[self.DST_DEVICE]
         if not self.device_exists(s_dev) or not self.device_exists(d_dev):
-            raise ValueError('Unknown device')
+            raise ValueError('Unknown antenna device')
         self.src_device :str = s_dev
         self.dst_device :str = d_dev
         # points
@@ -144,9 +146,12 @@ class Link:
     @classmethod
     def getHeightOffsets(cls, offsets:dict) -> dict:
         """ Parses offset data """
+        if(type(offsets) is not dict):
+            raise TypeError('offsets must be a dict')
         retval = {}
         if(cls.AUTO_OFFSET in offsets):
-            retval['auto'] = offsets[cls.AUTO_OFFSET]
+            auto = offsets[cls.AUTO_OFFSET]
+            retval['auto'] = auto if auto >= 0 else 0
             retval['src'] = retval['dst'] = 0
         else:
             retval['auto'] = cls.DEFAULT_AUTO_OFFSET

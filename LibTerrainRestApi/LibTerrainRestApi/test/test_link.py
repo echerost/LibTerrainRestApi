@@ -1,8 +1,9 @@
 import unittest
-import libterrain
+import copy
 from LibTerrainRestApi.link import Link
 import LibTerrainRestApi.test.testdata as tdata
 import configs.config as cfg
+import libterrain
 
 STI = None
 class Test_test_link(unittest.TestCase):
@@ -11,6 +12,32 @@ class Test_test_link(unittest.TestCase):
         global STI
         STI = libterrain.SingleTerrainInterface(cfg.DB_CONNECTION_STRING,
                lidar_table = cfg.LIDAR_TABLE_NAME)
+
+    def test_link_init(self):
+        with self.assertRaises(IndexError):
+            data=copy.deepcopy(tdata.a_input)
+            coords=data[Link.SRC_POINT]['coordinates']
+            del coords[1]
+            Link(data)
+        with self.assertRaises(TypeError):
+            Link(list())
+        with self.assertRaises(ValueError):
+            data=copy.deepcopy(tdata.a_input)
+            data[Link.SRC_DEVICE]=''
+            Link(data)
+        with self.assertRaises(KeyError):
+            data=copy.deepcopy(tdata.a_input)
+            data.pop(Link.SRC_DEVICE)
+            Link(data)
+
+    def test_getHeightOffsets(self):
+        with self.assertRaises(TypeError):
+            Link.getHeightOffsets(list())
+        with self.assertRaises(KeyError):            
+            Link.getHeightOffsets({})
+        with self.assertRaises(KeyError):
+            ofs={Link.SRC_OFFSET: 10}
+            Link.getHeightOffsets(ofs)
 
     def test_link_auto_offset(self):
         data = tdata.a_input
