@@ -13,16 +13,18 @@ def create_return_data(link:Link) -> dict:
         retval[link.LOSS] = link.loss,
         retval[link.SRC_ORIENTATION] = link.src_orientation,
         retval[link.DST_ORIENTATION] = link.dst_orientation,
-        # list of profile points    
-        feature = Feature(geometry=LineString(link.profile))
-        feat_collection = FeatureCollection([feature])
-        retval[link.PROFILE] = feat_collection
-        offsets={
+        # list of profile points
+        #feature = Feature(geometry=LineString(link.profile))
+        #feat_collection = FeatureCollection([feature])
+        #retval[link.PROFILE] = feat_collection
+        line = LineString(link.profile)
+        retval[link.PROFILE] = line
+        offsets = {
                link.SRC_OFFSET:link.src_offset,
                link.DST_OFFSET:link.dst_offset
                 }
-        retval[link.OFFSETS]= offsets
-        retval[link.BITRATE]=link.bitrate
+        retval[link.OFFSETS] = offsets
+        retval[link.BITRATE] = link.bitrate
     return retval
 
 def create_json_response(responseData, statusCode:int=200) -> Response:
