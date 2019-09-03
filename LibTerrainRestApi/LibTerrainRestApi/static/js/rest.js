@@ -22,18 +22,19 @@ function requestLinkData() {
           document.getElementById("info").innerText = 'Error 500';
           break;
         case 200:
-          var profile = JSON.parse(this.responseText);
+          var link = JSON.parse(this.responseText);
           // link non possibile
-          if (!profile.link_is_possible) {
+          if (!link.link_is_possible) {
             alert("Connection is not possible");
             //resetElevationData(false);
             return false;
           }
           resetElevationData(false);
           // aggiunge offset altezza primo e ultimo punto
-          var coordinates = profile.profile.features[0].geometry.coordinates;
-          coordinates[0][2] += profile.offsets.source;
-          coordinates[coordinates.length - 1][2] += profile.offsets.destination;
+          //var coordinates = link.profile.features[0].geometry.coordinates;
+          var coordinates = link.profile.coordinates;
+          coordinates[0][2] += link.offsets.source;
+          coordinates[coordinates.length - 1][2] += link.offsets.destination;
           //{ TEST: per verificare il corretto ridisegno dell'elevazione ed ellisse
           //var coordinates = profile.profile.features[0].geometry.coordinates;
           //var randHeight = Math.floor((Math.random() * 20) + 1);
@@ -41,9 +42,10 @@ function requestLinkData() {
           //coordinates[randmid][2] += randHeight;
           //document.getElementById("info").innerText = profile.link_is_possible.toString().toUpperCase();
           //}
-          elevation.loadData(JSON.stringify(profile.profile));
+          geojson_obj = GeoJSON.parse(link.profile, {'LineString': 'coordinates'});
+          elevation.loadData(JSON.stringify(geojson_obj));
           drawEllipse();
-          displayOffsetResult(profile.offsets.source, profile.offsets.destination, profile.loss, profile.maximum_bitrate);
+          displayOffsetResult(link.offsets.source, link.offsets.destination, link.loss, link.maximum_bitrate);
           showElevationView();
           break;
       }
