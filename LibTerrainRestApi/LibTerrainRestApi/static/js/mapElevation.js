@@ -34,6 +34,7 @@ function initMapTerrainProfile() {
     dragMode: false,
     cutPolygon: false,
     removalMode: false,
+    drawCircleMarker: false
   });
 
   // listen to vertexes being added to currently drawn layer (called workingLayer)
